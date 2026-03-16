@@ -6,6 +6,7 @@ import {
   Typography,
 } from "@mui/material";
 import { createBrowserRouter, RouterProvider, Link } from "react-router";
+import Table from "./component/ui/Table";
 
 const theme = createTheme({
   typography: {
@@ -18,8 +19,35 @@ const router = createBrowserRouter([
     path: "/",
     element: (
       <Box>
-        <Typography variant="h1">Home</Typography>
-        <Link to="/login">Login</Link>
+        <Table
+          coloumns={[
+            {
+              id: "tugas",
+              label: "Tugas",
+            },
+            {
+              id: "status",
+              label: "Status",
+            },
+          ]}
+          data={[
+            {
+              id: 1,
+              tugas: "Tugas 1",
+              status: "Baru aa",
+            },
+            {
+              id: 2,
+              tugas: "Tugas 1",
+              status: "Baru 1123",
+            },
+            {
+              id: 3,
+              tugas: "Tugas 1",
+              status: "Baru aa",
+            },
+          ]}
+        />
       </Box>
     ),
   },
