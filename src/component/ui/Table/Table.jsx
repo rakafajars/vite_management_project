@@ -1,7 +1,6 @@
 import {
   Table as BaseTable,
   Box,
-  LinearProgress,
   Paper,
   TableBody,
   TableCell,
