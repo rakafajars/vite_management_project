@@ -7,6 +7,7 @@ import {
 } from "@mui/material";
 import { createBrowserRouter, RouterProvider, Link } from "react-router";
 import Table from "./component/ui/Table";
+import Pagination from "./component/ui/Pagination";
 
 const theme = createTheme({
   typography: {
@@ -48,18 +49,24 @@ const router = createBrowserRouter([
             },
           ]}
         />
+        <Pagination
+          count={10}
+          onChange={(event, page) => {
+            console.log("page", page);
+          }}
+        />
       </Box>
     ),
   },
-  {
-    path: "/login",
-    element: (
-      <Box>
-        <Typography variant="h1">Login</Typography>
-        <Link to="/">Kembali ke Home</Link>
-      </Box>
-    ),
-  },
+  // {
+  //   path: "/login",
+  //   element: (
+  //     <Box>
+  //       <Typography variant="h1">Login</Typography>
+  //       <Link to="/">Kembali ke Home</Link>
+  //     </Box>
+  //   ),
+  // },
 ]);
 
 const App = () => {
