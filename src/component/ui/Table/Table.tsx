@@ -28,13 +28,12 @@ interface TableProps<T> {
 
 // 3. Gunakan Generic <T> pada fungsi komponen
 // Pastikan nama prop 'columns' dieja dengan benar (tadi 'coloumns')
-const Table = <T extends { id: string | number }>({ 
-  columns, 
-  data 
+const Table = <T extends { id: string | number }>({
+  columns,
+  data,
 }: TableProps<T>) => {
-  
   if (!columns || !data || data.length === 0) {
-    return <Box sx={{ p: 2, textAlign: 'center' }}>Data Tidak Tersedia</Box>;
+    return <Box sx={{ p: 2, textAlign: "center" }}>Data Tidak Tersedia</Box>;
   }
 
   return (
@@ -56,11 +55,13 @@ const Table = <T extends { id: string | number }>({
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
               {columns.map((column) => (
-                <TableCell key={`${row.id}-${column.id}`} align={column.align || "left"}>
+                <TableCell
+                  key={`${row.id}-${column.id}`}
+                  align={column.align || "left"}
+                >
                   {/* Jika ada fungsi render, gunakan itu. Jika tidak, ambil field berdasarkan ID */}
-                  {column.render 
-                    ? column.render(row) 
-                    : (row as any)[column.id] // 'as any' digunakan karena kita akses via string key
+                  {
+                    column.render ? column.render(row) : (row as any)[column.id] // 'as any' digunakan karena kita akses via string key
                   }
                 </TableCell>
               ))}

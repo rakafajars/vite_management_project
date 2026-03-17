@@ -2,7 +2,7 @@ import { Box, Button } from "@mui/material";
 import { useState } from "react";
 
 // Karena kita pakai index.ts, importnya cukup sampai folder Modal
-import Modal from "../../ui/Modal"; 
+import Modal from "../../ui/Modal";
 
 const Dashboard = () => {
   // 1. Berikan tipe data <boolean> dan nilai awal (false)
@@ -18,11 +18,7 @@ const Dashboard = () => {
       </Button>
 
       {/* Komponen Modal yang sudah sakti dengan TypeScript */}
-      <Modal 
-        open={openModal} 
-        handleClose={handleClose} 
-        title="Judul Modal"
-      >
+      <Modal open={openModal} handleClose={handleClose} title="Judul Modal">
         <Box
           sx={{
             padding: 2,

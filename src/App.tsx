@@ -3,6 +3,8 @@ import { createBrowserRouter, RouterProvider } from "react-router";
 
 import Login from "./component/pages/Auth/Login";
 import Dashboard from "./component/pages/Dashboard";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 const theme = createTheme({
   typography: {
@@ -74,8 +76,10 @@ const router = createBrowserRouter([
 const App = () => {
   return (
     <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <RouterProvider router={router} />
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <CssBaseline />
+        <RouterProvider router={router} />
+      </LocalizationProvider>
     </ThemeProvider>
   );
 };

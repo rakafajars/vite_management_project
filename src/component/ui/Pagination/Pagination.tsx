@@ -1,8 +1,8 @@
-import { 
-  Pagination as BasePagination, 
-  Box, 
-  Stack, 
-  PaginationProps as MuiPaginationProps 
+import {
+  Pagination as BasePagination,
+  Box,
+  Stack,
+  PaginationProps as MuiPaginationProps,
 } from "@mui/material";
 import { ChangeEvent } from "react";
 

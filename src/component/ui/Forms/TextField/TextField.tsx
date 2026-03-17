@@ -3,7 +3,10 @@ import { Controller, Control, FieldValues, Path } from "react-hook-form";
 
 // 1. Definisikan Interface Props dengan Generic <T>
 // Kita mewarisi TextFieldProps dari MUI agar semua fitur asli (seperti type="password") tetap ada.
-interface CustomTextFieldProps<T extends FieldValues> extends Omit<TextFieldProps, 'name'> {
+interface CustomTextFieldProps<T extends FieldValues> extends Omit<
+  TextFieldProps,
+  "name"
+> {
   control: Control<T>;
   name: Path<T>;
   label: string;
@@ -15,6 +18,7 @@ const TextField = <T extends FieldValues>({
   name,
   label,
   defaultValue = "",
+  helperText = "",
   ...props
 }: CustomTextFieldProps<T>) => {
   return (
@@ -22,19 +26,18 @@ const TextField = <T extends FieldValues>({
       name={name}
       control={control}
       defaultValue={defaultValue}
-      // Ambil 'field' secara utuh di sini
       render={({ field, fieldState: { error } }) => {
         return (
           <Box sx={{ marginBottom: 2 }}>
             <BaseTextField
               {...props}
-              {...field} // Variabel 'field' sekarang ditemukan!
+              {...field}
               fullWidth
               label={label}
               variant="outlined"
-              value={field.value ?? ""} // Pakai field.value
+              value={field.value ?? ""}
               error={!!error}
-              helperText={error ? error.message : props.helperText}
+              helperText={helperText}
             />
           </Box>
         );

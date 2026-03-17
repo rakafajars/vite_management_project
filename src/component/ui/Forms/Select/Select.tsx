@@ -15,7 +15,10 @@ interface SelectOption {
 }
 
 // 2. Props Komponen dengan Generic <T>
-interface CustomSelectProps<T extends FieldValues> extends Omit<BaseSelectProps, 'name'> {
+interface CustomSelectProps<T extends FieldValues> extends Omit<
+  BaseSelectProps,
+  "name"
+> {
   control: Control<T>;
   name: Path<T>;
   label: string;
@@ -45,7 +48,7 @@ const Select = <T extends FieldValues>({
           <BaseSelect
             {...props}
             {...field}
-            value={field.value ?? ""} 
+            value={field.value ?? ""}
             label={label}
           >
             {options?.map((option, index) => (
