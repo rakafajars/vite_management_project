@@ -5,6 +5,7 @@ import Login from "./component/pages/Auth/Login";
 import Dashboard from "./component/pages/Dashboard";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import DetailProject from "./component/pages/Project/DetailProject";
 
 const theme = createTheme({
   typography: {
@@ -70,6 +71,11 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: <Login />,
+  },
+
+  {
+    path: "/projects/:id",
+    element: <DetailProject />,
   },
 ]);
 
