@@ -1,6 +1,7 @@
 import { Stack } from "@mui/material";
 import Dropdown from "../../../ui/Forms/Dropdown";
 import { Settings } from "@mui/icons-material";
+import Avatar from "../../../ui/Avatar";
 
 const DetailProject = () => {
   return (
@@ -12,6 +13,13 @@ const DetailProject = () => {
       justifyContent={"center"}
       alignItems={"center"}
     >
+      <Avatar
+        text="Raka Fajar"
+        onClick={() => {
+          console.log("handle click avatar");
+        }}
+      />
+
       <Dropdown
         icon={<Settings />}
         options={[
