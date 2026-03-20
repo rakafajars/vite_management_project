@@ -3,6 +3,7 @@ import React from "react";
 import Dropdown from "../../../ui/Forms/Dropdown";
 import { AccountCircle } from "@mui/icons-material";
 import { grey } from "@mui/material/colors";
+import Avatar from "../../../ui/Avatar";
 
 // 👇 Kita bisa define tipe DropdownOption di sini
 //    atau nanti akan ada di file Dropdown.tsx itu sendiri

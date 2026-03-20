@@ -1,6 +1,7 @@
 import { Box } from "@mui/material";
 import SidebarMenu from "./SidebarMenu";
 import React from "react";
+import Avatar from "../../../ui/Avatar";
 
 const Sidebar = (): React.ReactElement => {
   return (
