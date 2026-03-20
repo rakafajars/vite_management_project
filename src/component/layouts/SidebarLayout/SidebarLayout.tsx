@@ -73,7 +73,7 @@ const SidebarLayout: React.FC<SidebarLayoutProps> = ({
       <Box
         component={"main"}
         sx={{
-          marginLeft: "240px",
+          marginLeft: "260px",
           marginTop: "4rem",
           paddingTop: 3,
           paddingRight: 3,
@@ -81,6 +81,8 @@ const SidebarLayout: React.FC<SidebarLayoutProps> = ({
           flexGrow: 1,
           flexShrink: 0,
           position: "relative",
+          backgroundColor: "#f5f7fa",
+          minHeight: "100vh",
         }}
       >
         {breadcrumbs.length > 0 && (
