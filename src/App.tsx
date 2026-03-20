@@ -10,7 +10,7 @@ import Settings from "./component/pages/Settings";
 
 const theme = createTheme({
   typography: {
-    fontFamily: ["Roboto", "sans-serif"].join(","),
+    fontFamily: ["Manrope", "sans-serif"].join(","),
   },
 });
 

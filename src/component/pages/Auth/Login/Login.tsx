@@ -1,4 +1,4 @@
-import { Box, Button, Paper, Stack, Typography } from "@mui/material";
+import { Box, Button, Chip, Paper, Stack, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 import TextField from "../../../ui/Forms/TextField";
 
@@ -24,28 +24,6 @@ const Login = () => {
   console.log("username:", username);
 
   return (
-    // <Stack
-    //   spacing={2}
-    //   alignItems={"center"}
-    //   justifyContent={"center"}
-    //   sx={{ height: "100vh" }} // Gunakan sx untuk konsistensi di MUI
-    // >
-    //   <Paper
-    //     sx={{
-    //       width: 600,
-    //       padding: 3, // Sedikit lebih besar agar tidak terlalu sesak
-    //     }}
-    //   >
-    //     <Stack spacing={3}>
-    //       <Typography>Welcome Back</Typography>
-    //       <Typography>Continue drafting your professional story.</Typography>
-    //       <TextField name="username" control={control} label="Username" />
-    //       <TextField name="password" control={control} label="Password" />
-    //       <Button variant="contained">Login</Button>
-    //     </Stack>
-    //   </Paper>
-    // </Stack>
-
     <Box display={"flex"} flexDirection={"row"} height={"100vh"}>
       <Box
         flex={1}
@@ -53,6 +31,7 @@ const Login = () => {
         display={"flex"}
         flexDirection={"column"}
         justifyContent={"space-between"}
+        p={"48px"}
       >
         <Box
           flexDirection={"row"}
@@ -61,8 +40,49 @@ const Login = () => {
           gap={1}
         >
           <img src="/src/assets/ic_architect_cv.svg" height={24} width={16} />
-          <Typography color="white" fontSize={18} fontWeight={"bold"}>
+          <Typography color="white" fontSize={24} fontWeight={"bold"}>
             Architect CV
+          </Typography>
+        </Box>
+
+        <Box flexDirection={"column"} display={"flex"} gap={2}>
+          <Typography
+            color="white"
+            fontWeight={"bold"}
+            fontSize={48}
+            fontFamily={"Manrope, sans-serif"}
+          >
+            The Editorial Approach to Career Design.
+          </Typography>
+          <Typography
+            color="white"
+            fontSize={18}
+            fontFamily={"Inter, sans-serif"}
+            fontWeight={500}
+          >
+            Craft your professional narrative using our curated architectural
+            framework.
+          </Typography>
+        </Box>
+
+        <Box
+          borderRadius={"8px"}
+          paddingX={"16px"}
+          paddingY={"8px"}
+          sx={{
+            display: "inline-flex", // 👈 pindah ke sini
+            backgroundColor: "rgba(255, 255, 255, 0.1)",
+            backdropFilter: "blur(4px)",
+            alignSelf: "flex-start",
+          }}
+        >
+          <Typography
+            color="#95CFE7"
+            fontSize={14}
+            fontFamily={"Inter, sans-serif"}
+            fontWeight={500}
+          >
+            v2.4 Ready
           </Typography>
         </Box>
       </Box>
