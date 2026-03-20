@@ -1,17 +1,12 @@
-import { Paper, Stack } from "@mui/material";
+import { Box, Button, Paper, Stack, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
-
-import Select from "../../../ui/Forms/Select";
-import TextField from "../../../ui/Forms/TextField"; // Perbaikan typo dari TextFeild
-import DatePicker from "../../../ui/Forms/DatePicker";
-import dayjs from "dayjs";
+import TextField from "../../../ui/Forms/TextField";
 
 // 1. Definisikan Interface untuk Form
 // Ini seperti membuat Data Model di Flutter
 interface LoginFormInputs {
   username: string;
-  category: string;
-  filterDate: any;
+  password: string;
 }
 
 const Login = () => {
@@ -19,57 +14,60 @@ const Login = () => {
   const { control, watch } = useForm<LoginFormInputs>({
     defaultValues: {
       username: "",
-      category: "",
-      filterDate: dayjs(),
+      password: "",
     },
   });
 
   // TypeScript sekarang tahu kalau username & category adalah string
   const username = watch("username");
-  const category = watch("category");
-  const filterDate = watch("filterDate");
 
   console.log("username:", username);
-  console.log("category:", category);
-  console.log("filterDate", filterDate);
 
   return (
-    <Stack
-      spacing={2}
-      alignItems={"center"}
-      justifyContent={"center"}
-      sx={{ height: "100vh" }} // Gunakan sx untuk konsistensi di MUI
-    >
-      <Paper
-        sx={{
-          width: 600,
-          padding: 3, // Sedikit lebih besar agar tidak terlalu sesak
-        }}
+    // <Stack
+    //   spacing={2}
+    //   alignItems={"center"}
+    //   justifyContent={"center"}
+    //   sx={{ height: "100vh" }} // Gunakan sx untuk konsistensi di MUI
+    // >
+    //   <Paper
+    //     sx={{
+    //       width: 600,
+    //       padding: 3, // Sedikit lebih besar agar tidak terlalu sesak
+    //     }}
+    //   >
+    //     <Stack spacing={3}>
+    //       <Typography>Welcome Back</Typography>
+    //       <Typography>Continue drafting your professional story.</Typography>
+    //       <TextField name="username" control={control} label="Username" />
+    //       <TextField name="password" control={control} label="Password" />
+    //       <Button variant="contained">Login</Button>
+    //     </Stack>
+    //   </Paper>
+    // </Stack>
+
+    <Box display={"flex"} flexDirection={"row"} height={"100vh"}>
+      <Box
+        flex={1}
+        bgcolor={"#003544"}
+        display={"flex"}
+        flexDirection={"column"}
+        justifyContent={"space-between"}
       >
-        <Stack spacing={3}>
-          <DatePicker
-            control={control}
-            name={"filterDate"}
-            label="Pilih Tanggal"
-          />
-
-          {/* name di sini sekarang punya autocomplete (username/category) */}
-          <TextField name="username" control={control} label="Username" />
-
-          <Select
-            name="category"
-            control={control}
-            label="Pilih Kategori"
-            id="category-select"
-            options={[
-              { value: "Kategori 1", label: "Kategori 1" },
-              { value: "Kategori 2", label: "Kategori 2" },
-              { value: "Kategori 3", label: "Kategori 3" },
-            ]}
-          />
-        </Stack>
-      </Paper>
-    </Stack>
+        <Box
+          flexDirection={"row"}
+          display={"flex"}
+          alignItems={"center"}
+          gap={1}
+        >
+          <img src="/src/assets/ic_architect_cv.svg" height={24} width={16} />
+          <Typography color="white" fontSize={18} fontWeight={"bold"}>
+            Architect CV
+          </Typography>
+        </Box>
+      </Box>
+      <Box flex={2} bgcolor={"#ffffff"}></Box>
+    </Box>
   );
 };
 
