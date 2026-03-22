@@ -3,13 +3,13 @@ import { Box, Typography } from "@mui/material";
 interface FeatureItemProps {
   title: string;
   description: string;
-  iconSrc?: string;
+  icon?: string;
 }
 
 const FeatureItem = ({
   title,
   description,
-  iconSrc = "/src/assets/ic_architect_cv.svg",
+  icon = "A",
 }: FeatureItemProps) => {
   return (
     <Box
@@ -26,13 +26,18 @@ const FeatureItem = ({
         sx={{
           backgroundColor: "#CFE6F2",
         }}
-        paddingX={"14px"}
-        paddingY={"11px"}
         alignItems={"center"}
         justifyContent={"center"}
         display={"flex"}
       >
-        <img src={iconSrc} height={24} width={24} alt={title} />
+        <Typography
+          fontSize={"18px"}
+          fontWeight={"bold"}
+          color="#003544"
+          fontFamily={"Manrope, sans-serif"}
+        >
+          {icon}
+        </Typography>
       </Box>
       <Box>
         <Typography fontSize={"16px"} color="#003544" fontWeight={"bold"}>

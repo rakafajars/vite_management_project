@@ -27,10 +27,12 @@ const RegisterLeftPanel = () => {
         <FeatureItem
           title="Architectural Precision"
           description="Clean, asymmetrical layouts that command attention."
+          icon="A"
         />
         <FeatureItem
           title="Live Editorial View"
           description="See your profile transform in real-time as you draft."
+          icon="✨"
         />
       </Box>
     </Box>

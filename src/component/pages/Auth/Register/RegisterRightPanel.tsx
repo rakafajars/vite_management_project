@@ -67,7 +67,7 @@ const RegisterRightPanel = (): React.ReactElement => {
             <TextField
               control={control}
               name="fullname"
-              placeholder="Alexande Wright"
+              placeholder="Alexander Wright"
             />
           </Grid>
         </Grid>
@@ -109,6 +109,7 @@ const RegisterRightPanel = (): React.ReactElement => {
             <TextField
               control={control}
               name="password"
+              type="password"
               placeholder="••••••••"
             />
           </Grid>
@@ -130,6 +131,7 @@ const RegisterRightPanel = (): React.ReactElement => {
             <TextField
               control={control}
               name="confirmPassword"
+              type="password"
               placeholder="••••••••"
             />
           </Grid>
