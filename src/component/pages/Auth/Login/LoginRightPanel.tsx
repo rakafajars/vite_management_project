@@ -9,6 +9,7 @@ import {
 import { useForm } from "react-hook-form";
 import { ArrowRightAltSharp } from "@mui/icons-material";
 import TextField from "../../../ui/Forms/TextField/TextField";
+import { useNavigate } from "react-router";
 
 interface LoginFormInputs {
   username: string;
@@ -22,6 +23,8 @@ const LoginRightPanel = (): React.ReactElement => {
       password: "",
     },
   });
+
+  const navigate = useNavigate();
 
   return (
     <Box bgcolor={"white"} flex={2} position={"relative"}>
@@ -186,7 +189,7 @@ const LoginRightPanel = (): React.ReactElement => {
             }}
             textAlign={"center"}
           >
-            Don't have an coount?{" "}
+            Don't have an acount?{" "}
             <span
               style={{
                 color: "#003544",
@@ -194,6 +197,7 @@ const LoginRightPanel = (): React.ReactElement => {
                 fontWeight: "600",
                 cursor: "pointer",
               }}
+              onClick={() => navigate("/register")}
             >
               Create an Account
             </span>

@@ -1,4 +1,5 @@
 import { Box, Typography } from "@mui/material";
+import BrandLogoText from "../../../ui/BrandLogoText";
 
 const LoginLeftPanel = (): React.ReactElement => {
   return (
@@ -12,9 +13,7 @@ const LoginLeftPanel = (): React.ReactElement => {
     >
       <Box flexDirection={"row"} display={"flex"} alignItems={"center"} gap={1}>
         <img src="/src/assets/ic_architect_cv.svg" height={24} width={16} />
-        <Typography color="white" fontSize={24} fontWeight={"bold"}>
-          Architect CV
-        </Typography>
+        <BrandLogoText color="white" fontSize={24} />
       </Box>
 
       <Box flexDirection={"column"} display={"flex"} gap={2}>

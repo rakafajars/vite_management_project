@@ -7,6 +7,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import DetailProject from "./component/pages/Project/DetailProject";
 import Settings from "./component/pages/Settings";
+import Register from "./component/pages/Auth/Register";
 
 const theme = createTheme({
   typography: {
@@ -81,6 +82,10 @@ const router = createBrowserRouter([
   {
     path: "/settings",
     element: <Settings />,
+  },
+  {
+    path: "/register",
+    element: <Register />,
   },
 ]);
 
