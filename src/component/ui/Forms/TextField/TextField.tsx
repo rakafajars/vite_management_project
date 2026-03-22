@@ -14,7 +14,7 @@ interface CustomTextFieldProps<T extends FieldValues> extends Omit<
 > {
   control: Control<T>;
   name: Path<T>;
-  label: string;
+  label?: string;
   defaultValue?: any;
   rightLabel?: React.ReactNode;
   marginBottom?: string | number;

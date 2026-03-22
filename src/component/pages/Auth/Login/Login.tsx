@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
-import LoginLeftPanel from "../layout/LoginLeftPanel";
-import LoginRightPanel from "../layout/LoginRightPanel";
+import LoginLeftPanel from "./LoginLeftPanel";
+import LoginRightPanel from "./LoginRightPanel";
 
 const Login = () => {
   return (
