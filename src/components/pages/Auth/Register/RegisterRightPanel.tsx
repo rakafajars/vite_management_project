@@ -1,9 +1,9 @@
-import { ArrowForward } from '@mui/icons-material';
-import { Box, Button, Paper, Typography } from '@mui/material';
-import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router';
+import { ArrowForward } from "@mui/icons-material";
+import { Box, Button, Paper, Typography } from "@mui/material";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router";
 
-import TextField from '../../../ui/Forms/TextField/TextField';
+import TextField from "@/components/ui/Forms/TextField/TextField";
 
 interface RegisterFormInputs {
   fullname: string;
@@ -15,10 +15,10 @@ interface RegisterFormInputs {
 const RegisterRightPanel = () => {
   const { control, handleSubmit } = useForm<RegisterFormInputs>({
     defaultValues: {
-      fullname: '',
-      email: '',
-      password: '',
-      confirmPassword: '',
+      fullname: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
     },
   });
 
@@ -32,29 +32,29 @@ const RegisterRightPanel = () => {
   return (
     <Box
       sx={{
-        flex: { xs: '1', lg: '1 1 55%' },
-        maxWidth: { lg: '650px' },
-        width: '100%',
+        flex: { xs: "1", lg: "1 1 55%" },
+        maxWidth: { lg: "650px" },
+        width: "100%",
       }}
     >
       <Paper
         elevation={0}
         sx={{
-          borderRadius: { xs: '24px', md: '32px' },
+          borderRadius: { xs: "24px", md: "32px" },
           p: { xs: 3, sm: 4, md: 5 },
-          backgroundColor: '#FFFFFF',
-          boxShadow: '0px 10px 40px 0px rgba(0, 31, 41, 0.06)',
+          backgroundColor: "#FFFFFF",
+          boxShadow: "0px 10px 40px 0px rgba(0, 31, 41, 0.06)",
         }}
       >
         {/* Header */}
         <Box sx={{ mb: { xs: 3, md: 4 } }}>
           <Typography
             sx={{
-              fontFamily: 'Inter, sans-serif',
-              fontSize: { xs: '11px', md: '12px' },
+              fontFamily: "Inter, sans-serif",
+              fontSize: { xs: "11px", md: "12px" },
               fontWeight: 500,
-              letterSpacing: '1.8px',
-              color: '#003544',
+              letterSpacing: "1.8px",
+              color: "#003544",
               opacity: 0.6,
               mb: 1.5,
             }}
@@ -64,10 +64,10 @@ const RegisterRightPanel = () => {
           <Typography
             component="h2"
             sx={{
-              fontFamily: 'Manrope, sans-serif',
-              fontSize: { xs: '26px', md: '32px' },
+              fontFamily: "Manrope, sans-serif",
+              fontSize: { xs: "26px", md: "32px" },
               fontWeight: 700,
-              color: '#003544',
+              color: "#003544",
             }}
           >
             Create Account
@@ -80,20 +80,20 @@ const RegisterRightPanel = () => {
           <Box sx={{ mb: { xs: 2, md: 2.5 } }}>
             <Box
               sx={{
-                display: 'flex',
-                alignItems: 'center',
+                display: "flex",
+                alignItems: "center",
                 mb: 1.5,
               }}
             >
               <Typography
                 sx={{
-                  fontFamily: 'Inter, sans-serif',
-                  fontSize: '12px',
+                  fontFamily: "Inter, sans-serif",
+                  fontSize: "12px",
                   fontWeight: 500,
-                  letterSpacing: '0.8px',
-                  color: '#003544',
+                  letterSpacing: "0.8px",
+                  color: "#003544",
                   opacity: 0.7,
-                  width: { xs: '100%', sm: '140px' },
+                  width: { xs: "100%", sm: "140px" },
                   flexShrink: 0,
                 }}
               >
@@ -112,20 +112,20 @@ const RegisterRightPanel = () => {
           <Box sx={{ mb: { xs: 2, md: 2.5 } }}>
             <Box
               sx={{
-                display: 'flex',
-                alignItems: 'center',
+                display: "flex",
+                alignItems: "center",
                 mb: 1.5,
               }}
             >
               <Typography
                 sx={{
-                  fontFamily: 'Inter, sans-serif',
-                  fontSize: '12px',
+                  fontFamily: "Inter, sans-serif",
+                  fontSize: "12px",
                   fontWeight: 500,
-                  letterSpacing: '0.8px',
-                  color: '#003544',
+                  letterSpacing: "0.8px",
+                  color: "#003544",
                   opacity: 0.7,
-                  width: { xs: '100%', sm: '140px' },
+                  width: { xs: "100%", sm: "140px" },
                   flexShrink: 0,
                 }}
               >
@@ -145,20 +145,20 @@ const RegisterRightPanel = () => {
           <Box sx={{ mb: { xs: 2, md: 2.5 } }}>
             <Box
               sx={{
-                display: 'flex',
-                alignItems: 'center',
+                display: "flex",
+                alignItems: "center",
                 mb: 1.5,
               }}
             >
               <Typography
                 sx={{
-                  fontFamily: 'Inter, sans-serif',
-                  fontSize: '12px',
+                  fontFamily: "Inter, sans-serif",
+                  fontSize: "12px",
                   fontWeight: 500,
-                  letterSpacing: '0.8px',
-                  color: '#003544',
+                  letterSpacing: "0.8px",
+                  color: "#003544",
                   opacity: 0.7,
-                  width: { xs: '100%', sm: '140px' },
+                  width: { xs: "100%", sm: "140px" },
                   flexShrink: 0,
                 }}
               >
@@ -178,20 +178,20 @@ const RegisterRightPanel = () => {
           <Box sx={{ mb: { xs: 4, md: 5 } }}>
             <Box
               sx={{
-                display: 'flex',
-                alignItems: 'center',
+                display: "flex",
+                alignItems: "center",
                 mb: 1.5,
               }}
             >
               <Typography
                 sx={{
-                  fontFamily: 'Inter, sans-serif',
-                  fontSize: '12px',
+                  fontFamily: "Inter, sans-serif",
+                  fontSize: "12px",
                   fontWeight: 500,
-                  letterSpacing: '0.8px',
-                  color: '#003544',
+                  letterSpacing: "0.8px",
+                  color: "#003544",
                   opacity: 0.7,
-                  width: { xs: '100%', sm: '140px' },
+                  width: { xs: "100%", sm: "140px" },
                   flexShrink: 0,
                 }}
               >
@@ -210,26 +210,26 @@ const RegisterRightPanel = () => {
           {/* Footer Actions */}
           <Box
             sx={{
-              display: 'flex',
-              flexDirection: { xs: 'column', sm: 'row' },
-              justifyContent: 'space-between',
-              alignItems: { xs: 'stretch', sm: 'center' },
+              display: "flex",
+              flexDirection: { xs: "column", sm: "row" },
+              justifyContent: "space-between",
+              alignItems: { xs: "stretch", sm: "center" },
               gap: { xs: 2, sm: 0 },
             }}
           >
             <Typography
-              onClick={() => navigate('/login')}
+              onClick={() => navigate("/login")}
               sx={{
-                fontFamily: 'Inter, sans-serif',
-                fontSize: '14px',
+                fontFamily: "Inter, sans-serif",
+                fontSize: "14px",
                 fontWeight: 400,
-                color: '#4C616C',
-                textDecoration: 'underline',
-                cursor: 'pointer',
+                color: "#4C616C",
+                textDecoration: "underline",
+                cursor: "pointer",
                 order: { xs: 2, sm: 1 },
-                textAlign: { xs: 'center', sm: 'left' },
-                '&:hover': {
-                  color: '#003544',
+                textAlign: { xs: "center", sm: "left" },
+                "&:hover": {
+                  color: "#003544",
                 },
               }}
             >
@@ -240,19 +240,19 @@ const RegisterRightPanel = () => {
               variant="contained"
               endIcon={<ArrowForward />}
               sx={{
-                backgroundColor: '#003544',
-                borderRadius: '10px',
+                backgroundColor: "#003544",
+                borderRadius: "10px",
                 px: { xs: 3, md: 4 },
                 py: { xs: 1.5, md: 1.75 },
-                fontSize: { xs: '14px', md: '15px' },
+                fontSize: { xs: "14px", md: "15px" },
                 fontWeight: 600,
-                fontFamily: 'Inter, sans-serif',
-                textTransform: 'none',
+                fontFamily: "Inter, sans-serif",
+                textTransform: "none",
                 order: { xs: 1, sm: 2 },
-                boxShadow: '0px 4px 12px 0px rgba(0, 53, 68, 0.15)',
-                '&:hover': {
-                  backgroundColor: '#002a35',
-                  boxShadow: '0px 6px 16px 0px rgba(0, 53, 68, 0.25)',
+                boxShadow: "0px 4px 12px 0px rgba(0, 53, 68, 0.15)",
+                "&:hover": {
+                  backgroundColor: "#002a35",
+                  boxShadow: "0px 6px 16px 0px rgba(0, 53, 68, 0.25)",
                 },
               }}
             >

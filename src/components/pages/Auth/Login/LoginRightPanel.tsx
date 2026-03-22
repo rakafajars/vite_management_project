@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { ArrowRightAltSharp } from "@mui/icons-material";
-import TextField from "../../../ui/Forms/TextField/TextField";
+import TextField from "@/components/ui/Forms/TextField/TextField";
 import { useNavigate } from "react-router";
 
 interface LoginFormInputs {

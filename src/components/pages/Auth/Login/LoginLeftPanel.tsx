@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import BrandLogoText from "../../../ui/BrandLogoText";
+import BrandLogoText from "@/components/ui/BrandLogoText";
 
 const LoginLeftPanel = (): React.ReactElement => {
   return (

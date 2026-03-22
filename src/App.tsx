@@ -1,13 +1,13 @@
 import { Box, createTheme, CssBaseline, ThemeProvider } from "@mui/material";
 import { createBrowserRouter, RouterProvider } from "react-router";
 
-import Login from "./component/pages/Auth/Login";
-import Dashboard from "./component/pages/Dashboard";
+import Login from "./components/pages/Auth/Login";
+import Dashboard from "./components/pages/Dashboard";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import DetailProject from "./component/pages/Project/DetailProject";
-import Settings from "./component/pages/Settings";
-import Register from "./component/pages/Auth/Register";
+import DetailProject from "./components/pages/Project/DetailProject";
+import Settings from "./components/pages/Settings";
+import Register from "./components/pages/Auth/Register";
 
 const theme = createTheme({
   typography: {

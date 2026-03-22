@@ -1,7 +1,5 @@
 import { Box, SxProps, Theme } from "@mui/material";
 import { DatePicker as BaseDatePicker } from "@mui/x-date-pickers";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { Controller, Control, FieldValues, Path } from "react-hook-form";
 import dayjs, { Dayjs } from "dayjs";
 

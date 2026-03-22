@@ -2,7 +2,7 @@ import { Paper, Stack, Typography, colors } from "@mui/material";
 import Dropdown from "../../../ui/Forms/Dropdown";
 import { Settings } from "@mui/icons-material";
 import Avatar from "../../../ui/Avatar";
-import SidebarLayout from "../../../layouts/SidebarLayout";
+import SidebarLayout from "@/components/layouts/SidebarLayout";
 
 // const DetailProject = () => {
 //   return (

@@ -1,5 +1,5 @@
 import { Paper, Typography, colors } from "@mui/material";
-import SidebarLayout from "../../layouts/SidebarLayout";
+import SidebarLayout from "@/components/layouts/SidebarLayout";
 
 const Settings = () => {
   return (

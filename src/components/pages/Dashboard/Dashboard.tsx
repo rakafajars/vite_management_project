@@ -3,7 +3,7 @@ import { useState } from "react";
 
 // Karena kita pakai index.ts, importnya cukup sampai folder Modal
 import Modal from "../../ui/Modal";
-import SidebarLayout from "../../layouts/SidebarLayout";
+import SidebarLayout from "@/components/layouts/SidebarLayout";
 
 // const Dashboard = () => {
 //   // 1. Berikan tipe data <boolean> dan nilai awal (false)
