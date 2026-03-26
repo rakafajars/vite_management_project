@@ -17,7 +17,7 @@ interface LoginFormInputs {
 }
 
 const LoginRightPanel = (): React.ReactElement => {
-  const { control } = useForm<LoginFormInputs>({
+  const { control, handleSubmit } = useForm<LoginFormInputs>({
     defaultValues: {
       username: "",
       password: "",
@@ -25,6 +25,11 @@ const LoginRightPanel = (): React.ReactElement => {
   });
 
   const navigate = useNavigate();
+
+  const onSubmit = (formValue: LoginFormInputs) => {
+    console.log("Login data", formValue);
+    navigate("/");
+  };
 
   return (
     <Box bgcolor={"white"} flex={2} position={"relative"}>
@@ -70,7 +75,12 @@ const LoginRightPanel = (): React.ReactElement => {
         alignItems={"center"}
         textAlign={"left"}
       >
-        <Stack spacing={3} sx={{ width: "100%", maxWidth: "448px", px: 4 }}>
+        <Stack
+          component={"form"}
+          onSubmit={handleSubmit(onSubmit)}
+          spacing={3}
+          sx={{ width: "100%", maxWidth: "448px", px: 4 }}
+        >
           <Box
             sx={{
               textAlign: "left",
@@ -166,6 +176,7 @@ const LoginRightPanel = (): React.ReactElement => {
             />
           </Box>
           <Button
+            type="submit"
             variant="contained"
             style={{
               backgroundColor: "#003544",
