@@ -4,7 +4,7 @@ import session from './session';
 
 
 const network = axios.create({
-    baseURL: "api_url/v1",
+    baseURL: "http://localhost:8080/api/v1",
 });
 
 

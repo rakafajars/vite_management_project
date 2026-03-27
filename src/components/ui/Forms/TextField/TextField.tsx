@@ -3,8 +3,12 @@ import {
   Box,
   TextFieldProps,
   Typography,
+  InputAdornment,
+  IconButton,
 } from "@mui/material";
+import { VisibilityOffOutlined, VisibilityOutlined } from "@mui/icons-material";
 import { Controller, Control, FieldValues, Path } from "react-hook-form";
+import { useEffect, useState } from "react";
 
 // 1. Definisikan Interface Props dengan Generic <T>
 // Kita mewarisi TextFieldProps dari MUI agar semua fitur asli (seperti type="password") tetap ada.
@@ -30,6 +34,9 @@ const TextField = <T extends FieldValues>({
   marginBottom = "12px",
   ...props
 }: CustomTextFieldProps<T>) => {
+
+  const [showPassword, setShowPassword] = useState(false);
+
   return (
     <Controller
       name={name}
@@ -80,6 +87,15 @@ const TextField = <T extends FieldValues>({
                     borderColor: "#95CFE7",
                     borderWidth: "1px 1px 2px 1px",
                   },
+                  "&.Mui-error fieldset": {
+                    borderColor: "#d32f2f",
+                  },
+                  "&.Mui-error:hover fieldset": {
+                    borderColor: "#d32f2f",
+                  },
+                  "&.Mui-error.Mui-focused fieldset": {
+                    borderColor: "#d32f2f",
+                  },
                   "& input": {
                     padding: "18px 16px",
                     fontFamily: "Inter, sans-serif",
@@ -93,9 +109,23 @@ const TextField = <T extends FieldValues>({
                 },
                 ...props.sx,
               }}
+              type={props.type === "password" ? (showPassword ? "text" : "password") : props.type}
               value={field.value ?? ""}
               error={!!error}
-              helperText={helperText}
+              helperText={error?.message ? error.message : helperText}
+              InputProps={{
+                ...props.InputProps,
+                endAdornment:
+                  props.type === "password" ? (
+                    <InputAdornment position="end">
+                      <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                        {showPassword ? <VisibilityOffOutlined sx={{ color: "#A3A3A3" }} /> : <VisibilityOutlined sx={{ color: "#A3A3A3" }} />}
+                      </IconButton>
+                    </InputAdornment>
+                  ) : (
+                    props.InputProps?.endAdornment
+                  ),
+              }}
               slotProps={{
                 htmlInput: {
                   ...props.slotProps?.htmlInput,

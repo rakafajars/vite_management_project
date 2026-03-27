@@ -14,18 +14,22 @@ import session from "@/utils/session";
 import { useState } from "react";
 import services from "@/services";
 import { LoginPayload } from "@/services/api/auth";
+import * as Yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 
+
+const loginSchema = Yup.object({
+  email: Yup.string().required('Email tidak boleh kosong').email('Format email salah'),
+  password: Yup.string().required('Password tidak boleh kosong'),
+})
 
 
 const LoginRightPanel = (): React.ReactElement => {
   const [loading, setLoading] = useState(false)
 
   const { control, handleSubmit } = useForm<LoginPayload>({
-    defaultValues: {
-      email: "",
-      password: "",
-    },
+    resolver: yupResolver(loginSchema),
   });
 
   const navigate = useNavigate();
@@ -37,7 +41,10 @@ const LoginRightPanel = (): React.ReactElement => {
       const response = await services.auth.login(
         formValue
       );
-      session.setSession(''); // response.data 
+
+      const token = response.data.data.token;
+
+      session.setSession(token); // response.data 
       navigate('/');
     } catch (error) {
       console.error("Login gagal", error);
