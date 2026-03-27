@@ -11,26 +11,39 @@ import { ArrowRightAltSharp } from "@mui/icons-material";
 import TextField from "@/components/ui/Forms/TextField/TextField";
 import { useNavigate } from "react-router";
 import session from "@/utils/session";
+import { useState } from "react";
+import services from "@/services";
+import { LoginPayload } from "@/services/api/auth";
 
-interface LoginFormInputs {
-  username: string;
-  password: string;
-}
+
+
 
 const LoginRightPanel = (): React.ReactElement => {
-  const { control, handleSubmit } = useForm<LoginFormInputs>({
+  const [loading, setLoading] = useState(false)
+
+  const { control, handleSubmit } = useForm<LoginPayload>({
     defaultValues: {
-      username: "",
+      email: "",
       password: "",
     },
   });
 
   const navigate = useNavigate();
 
-  const onSubmit = (formValue: LoginFormInputs) => {
-    console.log("Login data", formValue);
-    session.setSession("dummy-token");
-    navigate("/");
+  const onSubmit = async (formValue: LoginPayload) => {
+    setLoading(true);
+
+    try {
+      const response = await services.auth.login(
+        formValue
+      );
+      session.setSession(''); // response.data 
+      navigate('/');
+    } catch (error) {
+      console.error("Login gagal", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -111,7 +124,7 @@ const LoginRightPanel = (): React.ReactElement => {
             </Typography>
             <TextField
               control={control}
-              name="username"
+              name="email"
               label="Email Address"
               placeholder="name@architect.com"
               marginBottom={"32px"}
