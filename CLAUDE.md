@@ -70,6 +70,7 @@ src/
 ### Key Architectural Patterns
 
 **Layout System**: Pages use the `SidebarLayout` component which provides:
+
 - Fixed sidebar navigation
 - Top navbar
 - Breadcrumb support via `breadcrumbs` prop (array of `{label, href}` objects)
@@ -77,11 +78,13 @@ src/
 - Main content area with proper margins (30px left margin for sidebar)
 
 **Routing**: Configured in `App.tsx` using `createBrowserRouter`:
+
 - `/` - Dashboard (main page)
 - `/login` - Login page
 - `/projects/:id` - Project detail page
 
 **Theming**: Custom MUI theme configured in `App.tsx`:
+
 - Default font: Roboto
 - Wrapped with `LocalizationProvider` (Day.js adapter for date components)
 - `CssBaseline` applied for consistent base styles
@@ -109,6 +112,7 @@ The project uses a comprehensive ESLint setup (eslint.config.js) with:
 ### Prettier Configuration
 
 Configured in `.prettier.json`:
+
 - Semicolons: required
 - Single quotes: true (note: config has typo "singleQuota" instead of "singleQuote")
 - Trailing commas: all
@@ -117,12 +121,14 @@ Configured in `.prettier.json`:
 ## TypeScript Migration Notes
 
 The codebase is actively being migrated from JavaScript to TypeScript:
+
 - Source files use `.tsx` extension for components
 - Strict mode enabled in tsconfig.json
 - Target: ESNext with react-jsx transform
 - Many components already have proper TypeScript interfaces
 
 When adding new components:
+
 - Define interface for props with descriptive names (e.g., `SidebarLayoutProps`)
 - Use `React.FC<PropsInterface>` for function components
 - Define interfaces for data structures (e.g., `BreadcrumbsItem`)
@@ -133,6 +139,7 @@ When adding new components:
 ### Reusable UI Components
 
 All reusable components live in `src/component/ui/`. These are custom wrappers around MUI components. When creating new components:
+
 - Place in appropriate subdirectory under `ui/`
 - Export as default from the component file
 - Use TypeScript interfaces for props
@@ -141,6 +148,7 @@ All reusable components live in `src/component/ui/`. These are custom wrappers a
 ### Forms
 
 Form components in `src/component/ui/Forms/` include:
+
 - TextField - Text input wrapper
 - Select - Dropdown select wrapper
 - DatePicker - Date picker using MUI X Date Pickers

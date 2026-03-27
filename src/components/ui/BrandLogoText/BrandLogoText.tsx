@@ -1,6 +1,9 @@
 import { Typography, TypographyProps } from "@mui/material";
 
-interface BrandLogoTextProps extends Omit<TypographyProps, "color" | "fontSize"> {
+interface BrandLogoTextProps extends Omit<
+  TypographyProps,
+  "color" | "fontSize"
+> {
   color?: string;
   fontSize?: string | number;
 }

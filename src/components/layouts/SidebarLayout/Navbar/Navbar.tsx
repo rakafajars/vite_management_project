@@ -4,6 +4,8 @@ import Dropdown from "../../../ui/Forms/Dropdown";
 import { AccountCircle } from "@mui/icons-material";
 import { grey } from "@mui/material/colors";
 import Avatar from "../../../ui/Avatar";
+import session from "@/utils/session";
+import { useNavigate } from "react-router";
 
 // 👇 Kita bisa define tipe DropdownOption di sini
 //    atau nanti akan ada di file Dropdown.tsx itu sendiri
@@ -14,6 +16,7 @@ interface DropdownOption {
 
 const Navbar = (): React.ReactElement => {
   // options diberi tipe array of DropdownOption
+  const navigate = useNavigate();
 
   const options: DropdownOption[] = [
     {
@@ -25,6 +28,9 @@ const Navbar = (): React.ReactElement => {
     {
       label: "Logout",
       onClick() {
+        session.clearSession();
+        navigate("/login")
+
         console.log("Handle logout");
       },
     },

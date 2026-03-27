@@ -83,22 +83,7 @@ export default defineConfig([
 
       // --- PENGATURAN IMPORT ---
       // Mengatur agar urutan import rapi: Library luar di atas, file lokal di bawah
-      "import/order": [
-        "warn",
-        {
-          groups: [
-            "builtin", // fs, path, dll
-            "external", // react, axios, dll
-            "internal", // folder src
-            "parent", // ../
-            "sibling", // ./
-            "index",
-          ],
-          "newlines-between": "always", // Kasih baris kosong antar grup
-          alphabetize: { order: "asc", caseInsensitive: true }, // Urutkan sesuai abjad
-          warnOnUnassignedImports: true,
-        },
-      ],
+      "import/order": "warn",
 
       // Membantu merapikan import yang banyak di dalam satu kurung kurawal { ... }
       "sort-imports": [

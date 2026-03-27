@@ -10,6 +10,7 @@ import { useForm } from "react-hook-form";
 import { ArrowRightAltSharp } from "@mui/icons-material";
 import TextField from "@/components/ui/Forms/TextField/TextField";
 import { useNavigate } from "react-router";
+import session from "@/utils/session";
 
 interface LoginFormInputs {
   username: string;
@@ -28,6 +29,7 @@ const LoginRightPanel = (): React.ReactElement => {
 
   const onSubmit = (formValue: LoginFormInputs) => {
     console.log("Login data", formValue);
+    session.setSession("dummy-token");
     navigate("/");
   };
 
