@@ -13,20 +13,26 @@ import { useNavigate } from "react-router";
 import session from "@/utils/session";
 import { useState } from "react";
 import services from "@/services";
-import { LoginPayload } from "@/services/api/auth";
-import * as Yup from 'yup';
+import { LoginPayload, loginSchema } from "@/services/api/auth";
 import { yupResolver } from '@hookform/resolvers/yup';
+import { AxiosError } from "axios";
+import { BaseApiResponse } from "@/types/api";
+import Dialog from "@/components/ui/Dialog";
+import { DialogAction } from "@/components/ui/Dialog/Dialog";
 
 
 
-const loginSchema = Yup.object({
-  email: Yup.string().required('Email tidak boleh kosong').email('Format email salah'),
-  password: Yup.string().required('Password tidak boleh kosong'),
-})
 
 
 const LoginRightPanel = (): React.ReactElement => {
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [dialogMessage, setDialogMessage] = useState({
+    title: "",
+    message: "",
+  });
+
+  const [dialogActions, setDialogActions] = useState<DialogAction[]>([]);
 
   const { control, handleSubmit } = useForm<LoginPayload>({
     resolver: yupResolver(loginSchema),
@@ -42,12 +48,31 @@ const LoginRightPanel = (): React.ReactElement => {
         formValue
       );
 
-      const token = response.data.data.token;
+      const token = response.data.data?.token;
 
-      session.setSession(token); // response.data 
+      if (token) {
+        session.setSession(token);
+      }
       navigate('/');
     } catch (error) {
-      console.error("Login gagal", error);
+      const axiosError = error as AxiosError<BaseApiResponse>;
+      const errorMessage = axiosError.response?.data?.error
+        || axiosError.response?.data?.message
+        || 'Silahkan coba lagi.';
+
+      setOpenDialog(true);
+      setDialogMessage({
+        title: 'Oops...',
+        message: errorMessage
+      });
+      setDialogActions([
+        {
+          label: 'Okay',
+          onClick() {
+            setOpenDialog(false)
+          }
+        }
+      ])
     } finally {
       setLoading(false);
     }
@@ -200,6 +225,7 @@ const LoginRightPanel = (): React.ReactElement => {
           <Button
             type="submit"
             variant="contained"
+            loading={loading}
             style={{
               backgroundColor: "#003544",
               borderRadius: "8px",
@@ -237,6 +263,14 @@ const LoginRightPanel = (): React.ReactElement => {
           </Typography>
         </Stack>
       </Box>
+
+      <Dialog
+        open={openDialog}
+        onClose={() => setOpenDialog(false)}
+        title={dialogMessage.title}
+        message={dialogMessage.message}
+        actions={dialogActions}
+      />
     </Box>
   );
 };

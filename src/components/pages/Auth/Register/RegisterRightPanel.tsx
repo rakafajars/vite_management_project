@@ -4,29 +4,65 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 
 import TextField from "@/components/ui/Forms/TextField/TextField";
+import { useState } from "react";
+import { RegisterPayload, registerSchema } from "@/services/api/auth";
+import { yupResolver } from "@hookform/resolvers/yup";
+import services from "@/services";
+import Dialog, { DialogAction } from "@/components/ui/Dialog/Dialog";
+import { AxiosError } from "axios";
+import { BaseApiResponse } from "@/types/api";
 
-interface RegisterFormInputs {
-  fullname: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-}
 
 const RegisterRightPanel = () => {
-  const { control, handleSubmit } = useForm<RegisterFormInputs>({
-    defaultValues: {
-      fullname: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-    },
+
+  const [loading, setLoading] = useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [dialogMessage, setDialogMessage] = useState({
+    title: "",
+    message: "",
+  });
+
+  const [dialogActions, setDialogActions] = useState<DialogAction[]>([]);
+
+
+
+  const { control, handleSubmit } = useForm<RegisterPayload>({
+    resolver: yupResolver(registerSchema),
   });
 
   const navigate = useNavigate();
 
-  const onSubmit = (data: RegisterFormInputs) => {
-    console.log(data);
-    // Handle registration logic here
+  const onSubmit = async (formValue: RegisterPayload) => {
+    setLoading(true);
+
+    try {
+      await services.auth.register(
+        formValue
+      );
+
+      navigate('/login')
+    } catch (error) {
+      const axiosError = error as AxiosError<BaseApiResponse>;
+      const errorMessage = axiosError.response?.data?.error 
+                        || axiosError.response?.data?.message 
+                        || 'Silahkan coba lagi.';
+
+      setOpenDialog(true);
+      setDialogMessage({
+        title: 'Oops...',
+        message: errorMessage
+      });
+      setDialogActions([
+        {
+          label: 'Okay',
+          onClick() {
+            setOpenDialog(false)
+          }
+        }
+      ])
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -77,7 +113,7 @@ const RegisterRightPanel = () => {
         {/* Form */}
         <Box component="form" onSubmit={handleSubmit(onSubmit)}>
           {/* Full Name Field */}
-          <Box sx={{ mb: { xs: 2, md: 2.5 } }}>
+          {/* <Box sx={{ mb: { xs: 2, md: 2.5 } }}>
             <Box
               sx={{
                 display: "flex",
@@ -106,7 +142,7 @@ const RegisterRightPanel = () => {
               placeholder="Alexander Wright"
               marginBottom="0"
             />
-          </Box>
+          </Box> */}
 
           {/* Email Field */}
           <Box sx={{ mb: { xs: 2, md: 2.5 } }}>
@@ -175,7 +211,7 @@ const RegisterRightPanel = () => {
           </Box>
 
           {/* Confirm Password Field */}
-          <Box sx={{ mb: { xs: 4, md: 5 } }}>
+          {/* <Box sx={{ mb: { xs: 4, md: 5 } }}>
             <Box
               sx={{
                 display: "flex",
@@ -205,7 +241,7 @@ const RegisterRightPanel = () => {
               placeholder="••••••••"
               marginBottom="0"
             />
-          </Box>
+          </Box> */}
 
           {/* Footer Actions */}
           <Box
@@ -239,6 +275,7 @@ const RegisterRightPanel = () => {
               type="submit"
               variant="contained"
               endIcon={<ArrowForward />}
+              loading={loading}
               sx={{
                 backgroundColor: "#003544",
                 borderRadius: "10px",
@@ -261,6 +298,13 @@ const RegisterRightPanel = () => {
           </Box>
         </Box>
       </Paper>
+      <Dialog
+        open={openDialog}
+        onClose={() => setOpenDialog(false)}
+        title={dialogMessage.title}
+        message={dialogMessage.message}
+        actions={dialogActions}
+      />
     </Box>
   );
 };
