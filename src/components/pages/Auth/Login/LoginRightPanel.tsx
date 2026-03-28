@@ -9,6 +9,7 @@ import {
 import { useForm } from "react-hook-form";
 import { ArrowRightAltSharp } from "@mui/icons-material";
 import TextField from "@/components/ui/Forms/TextField/TextField";
+import Snackbar from "@/components/ui/Snackbar";
 import { useNavigate } from "react-router";
 import session from "@/utils/session";
 import { useState } from "react";
@@ -17,22 +18,12 @@ import { LoginPayload, loginSchema } from "@/services/api/auth";
 import { yupResolver } from '@hookform/resolvers/yup';
 import { AxiosError } from "axios";
 import { BaseApiResponse } from "@/types/api";
-import Dialog from "@/components/ui/Dialog";
-import { DialogAction } from "@/components/ui/Dialog/Dialog";
-
-
-
-
 
 const LoginRightPanel = (): React.ReactElement => {
   const [loading, setLoading] = useState(false);
-  const [openDialog, setOpenDialog] = useState(false);
-  const [dialogMessage, setDialogMessage] = useState({
-    title: "",
-    message: "",
-  });
-
-  const [dialogActions, setDialogActions] = useState<DialogAction[]>([]);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">("error");
 
   const { control, handleSubmit } = useForm<LoginPayload>({
     resolver: yupResolver(loginSchema),
@@ -60,19 +51,9 @@ const LoginRightPanel = (): React.ReactElement => {
         || axiosError.response?.data?.message
         || 'Silahkan coba lagi.';
 
-      setOpenDialog(true);
-      setDialogMessage({
-        title: 'Oops...',
-        message: errorMessage
-      });
-      setDialogActions([
-        {
-          label: 'Okay',
-          onClick() {
-            setOpenDialog(false)
-          }
-        }
-      ])
+      setSnackbarSeverity("error");
+      setSnackbarMessage(errorMessage);
+      setOpenSnackbar(true);
     } finally {
       setLoading(false);
     }
@@ -264,12 +245,11 @@ const LoginRightPanel = (): React.ReactElement => {
         </Stack>
       </Box>
 
-      <Dialog
-        open={openDialog}
-        onClose={() => setOpenDialog(false)}
-        title={dialogMessage.title}
-        message={dialogMessage.message}
-        actions={dialogActions}
+      <Snackbar
+        open={openSnackbar}
+        onClose={() => setOpenSnackbar(false)}
+        severity={snackbarSeverity}
+        message={snackbarMessage}
       />
     </Box>
   );

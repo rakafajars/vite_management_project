@@ -4,25 +4,20 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 
 import TextField from "@/components/ui/Forms/TextField/TextField";
+import Snackbar from "@/components/ui/Snackbar";
 import { useState } from "react";
 import { RegisterPayload, registerSchema } from "@/services/api/auth";
 import { yupResolver } from "@hookform/resolvers/yup";
 import services from "@/services";
-import Dialog, { DialogAction } from "@/components/ui/Dialog/Dialog";
 import { AxiosError } from "axios";
 import { BaseApiResponse } from "@/types/api";
-
 
 const RegisterRightPanel = () => {
 
   const [loading, setLoading] = useState(false);
-  const [openDialog, setOpenDialog] = useState(false);
-  const [dialogMessage, setDialogMessage] = useState({
-    title: "",
-    message: "",
-  });
-
-  const [dialogActions, setDialogActions] = useState<DialogAction[]>([]);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">("error");
 
 
 
@@ -47,19 +42,9 @@ const RegisterRightPanel = () => {
                         || axiosError.response?.data?.message 
                         || 'Silahkan coba lagi.';
 
-      setOpenDialog(true);
-      setDialogMessage({
-        title: 'Oops...',
-        message: errorMessage
-      });
-      setDialogActions([
-        {
-          label: 'Okay',
-          onClick() {
-            setOpenDialog(false)
-          }
-        }
-      ])
+      setSnackbarSeverity("error");
+      setSnackbarMessage(errorMessage);
+      setOpenSnackbar(true);
     } finally {
       setLoading(false);
     }
@@ -298,12 +283,11 @@ const RegisterRightPanel = () => {
           </Box>
         </Box>
       </Paper>
-      <Dialog
-        open={openDialog}
-        onClose={() => setOpenDialog(false)}
-        title={dialogMessage.title}
-        message={dialogMessage.message}
-        actions={dialogActions}
+      <Snackbar
+        open={openSnackbar}
+        onClose={() => setOpenSnackbar(false)}
+        severity={snackbarSeverity}
+        message={snackbarMessage}
       />
     </Box>
   );
