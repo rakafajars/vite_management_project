@@ -5,7 +5,7 @@ import Login from "./components/pages/Auth/Login";
 import Dashboard from "./components/pages/Dashboard";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import DetailProject from "./components/pages/Project/DetailProject";
+import PengalamanKerja from "./components/pages/WorkExperience";
 import Settings from "./components/pages/Settings";
 import Register from "./components/pages/Auth/Register";
 import sidebarLoader from "./components/layouts/SidebarLayout/SidebarLayout.loader";
@@ -29,9 +29,8 @@ const router = createBrowserRouter([
     loader: authLoader,
   },
   {
-    // path: "/projects/:id",
-    path: "/projects",
-    element: <DetailProject />,
+    path: "/pengalaman-kerja",
+    element: <PengalamanKerja />,
     loader: sidebarLoader,
   },
   {

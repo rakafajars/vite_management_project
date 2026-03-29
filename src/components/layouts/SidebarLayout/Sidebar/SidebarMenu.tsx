@@ -28,7 +28,7 @@ const SidebarMenu = (): React.ReactElement => {
           <ListItemText>Dashboard</ListItemText>
         </MenuItem>
         <MenuItem
-          onClick={() => navigate("/projects")}
+          onClick={() => navigate("/pengalaman-kerja")}
           sx={{
             position: "relative",
           }}
@@ -36,7 +36,7 @@ const SidebarMenu = (): React.ReactElement => {
           <ListItemIcon>
             <Book fontSize="small" />
           </ListItemIcon>
-          <ListItemText>Daftar Proyek</ListItemText>
+          <ListItemText>Pengalaman Kerja</ListItemText>
         </MenuItem>
         <Divider />
         <MenuItem onClick={() => navigate("/settings")}>
