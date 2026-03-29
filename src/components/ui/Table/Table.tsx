@@ -9,10 +9,10 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
-import React, { ReactNode } from "react";
-
-
+import React from "react";
 
 
 // 1. Definisi struktur Kolom
@@ -20,6 +20,8 @@ export interface Coloumn<T> {
   id: string;
   label: string;
   align?: TableCellProps['align'];
+  minWidth?: number;
+  hideOnMobile?: boolean;
   // render bersifat opsional, jika ada maka kita kirimkan data satu baris (row)
   render?: (row: T) => React.ReactNode;
 }
@@ -36,6 +38,14 @@ const Table = <T extends { id: string | number }>({ coloumns,
   data,
   isLoading, }: TableProps<T>
 ): React.ReactElement => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
+  // Filter kolom berdasarkan layar
+  const visibleColumns = isMobile
+    ? coloumns.filter((col) => !col.hideOnMobile)
+    : coloumns;
+
   if (!isLoading && (!data || data.length === 0)) {
     return (
       <Box sx={{ p: 3, textAlign: 'center', color: 'text.secondary' }}>
@@ -45,8 +55,9 @@ const Table = <T extends { id: string | number }>({ coloumns,
   }
 
   return (<TableContainer component={Paper} sx={{
-    position: 'relative', borderRadius: '12px',
-    overflow: 'hidden'
+    position: 'relative',
+    borderRadius: '12px',
+    overflowX: 'auto',
   }} >
     {isLoading && (<LinearProgress sx={{
       position: 'absolute',
@@ -57,15 +68,24 @@ const Table = <T extends { id: string | number }>({ coloumns,
     }} />)}
 
 
-    <BaseTable sx={{ minWidth: 650 }} >
+    <BaseTable sx={{ minWidth: isMobile ? "auto" : 500 }} >
       <TableHead sx={{
         backgroundColor: "#f8f9fa"
       }}>
         <TableRow>
           {
-            coloumns.map((coloumn) => (
-              <TableCell key={coloumn.id} align={coloumn.align || 'left'}
-                sx={{ fontWeight: 'bold', color: '#003544' }}
+            visibleColumns.map((coloumn) => (
+              <TableCell
+                key={coloumn.id}
+                align={coloumn.align || 'left'}
+                sx={{
+                  fontWeight: 'bold',
+                  color: '#003544',
+                  minWidth: coloumn.minWidth,
+                  whiteSpace: 'nowrap',
+                  fontSize: { xs: '0.8rem', sm: '0.875rem' },
+                  px: { xs: 1, sm: 2 },
+                }}
               >
                 {coloumn.label}
               </TableCell>
@@ -78,10 +98,20 @@ const Table = <T extends { id: string | number }>({ coloumns,
         {data.map((row) => (
           <TableRow
             key={row.id}
-            sx={{ '&:last-child td, &:last-child th': { border: 0 }, '&:hover': { bgcolor: '#f5f5f5' } }}
+            sx={{
+              '&:last-child td, &:last-child th': { border: 0 },
+              '&:hover': { bgcolor: '#f5f5f5' },
+            }}
           >
-            {coloumns.map((coloumn) => (
-              <TableCell key={coloumn.id} align={coloumn.align || 'left'} >
+            {visibleColumns.map((coloumn) => (
+              <TableCell
+                key={coloumn.id}
+                align={coloumn.align || 'left'}
+                sx={{
+                  px: { xs: 1, sm: 2 },
+                  fontSize: { xs: '0.8rem', sm: '0.875rem' },
+                }}
+              >
                 {coloumn.render ? coloumn.render(row) : (row as any)[coloumn.id]}
               </TableCell>
             ))}

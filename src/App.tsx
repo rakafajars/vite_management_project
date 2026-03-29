@@ -10,6 +10,7 @@ import Settings from "./components/pages/Settings";
 import Register from "./components/pages/Auth/Register";
 import sidebarLoader from "./components/layouts/SidebarLayout/SidebarLayout.loader";
 import authLoader from "./components/pages/Auth/Auth.loader";
+import Skills from "./components/pages/Skills";
 
 const theme = createTheme({
   typography: {
@@ -31,6 +32,11 @@ const router = createBrowserRouter([
   {
     path: "/pengalaman-kerja",
     element: <PengalamanKerja />,
+    loader: sidebarLoader,
+  },
+  {
+    path: "/skills",
+    element: <Skills />,
     loader: sidebarLoader,
   },
   {
