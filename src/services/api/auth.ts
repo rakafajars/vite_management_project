@@ -30,11 +30,11 @@ export interface RegisterResponseData {
 
 const auth = {
     login(payload: LoginPayload) {
-        return network.post<BaseApiResponse<LoginResponseData>>('/login', payload);
+        return network.post<BaseApiResponse<LoginResponseData>>('/v1/login', payload);
     },
 
     register(payload: RegisterPayload) {
-        return network.post<BaseApiResponse<RegisterResponseData>>('/register', payload);
+        return network.post<BaseApiResponse<RegisterResponseData>>('/v1/register', payload);
     }
 }
 
