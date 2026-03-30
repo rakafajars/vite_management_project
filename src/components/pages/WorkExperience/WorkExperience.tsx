@@ -9,7 +9,10 @@ import dayjs from "dayjs";
 import { useForm, useWatch } from "react-hook-form";
 import TextField from "@/components/ui/Forms/TextField/TextField";
 import { useDebounce } from 'use-debounce';
-import { BaseMeta } from "@/types/api";
+import { BaseApiResponse, BaseMeta } from "@/types/api";
+import Dialog from "@/components/ui/Dialog";
+import Snackbar from "@/components/ui/Snackbar";
+import { AxiosError } from "axios";
 
 
 const WorkExperience = () => {
@@ -24,7 +27,6 @@ const WorkExperience = () => {
   // States untuk UI Sort (mocking)
   const [orderBy, setOrderBy] = useState<string>("company_name");
   const [order, setOrder] = useState<"asc" | "desc">("asc");
-
 
 
   const { control } = useForm({
@@ -60,7 +62,7 @@ const WorkExperience = () => {
   const fetchWorkExperience = async () => {
     setIsLoading(true);
     try {
-      const response = await services.workExperience.workExperince({
+      const response = await services.workExperience.workExperience({
         search: debounceSearch,
         page: page + 1,
         limit: rowsPerPage,
@@ -82,6 +84,40 @@ const WorkExperience = () => {
   useEffect(() => {
     fetchWorkExperience();
   }, [debounceSearch, rowsPerPage, page, orderBy, order]);
+
+
+
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">("error");
+
+
+  // State untuk mngontrol buka/tutup dialog
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  // State untuk menyimpan id yang akan dihapus
+  const [selectedId, setSelectedId] = useState<number | null>(null);
+  const handleDeleteConfirm = async () => {
+    if (!selectedId) return;
+
+    try {
+      await services.workExperience.deleteExperience(selectedId);
+
+      setIsDeleteDialogOpen(false);
+      setSnackbarSeverity("success");
+      setSnackbarMessage('Berhasil menghapus pengalaman kerja');
+      setOpenSnackbar(true);
+      fetchWorkExperience();
+    } catch (error) {
+      const axiosError = error as AxiosError<BaseApiResponse>;
+      const errorMessage = axiosError.response?.data?.error
+        || axiosError.response?.data?.message
+        || 'Silahkan coba lagi.';
+
+      setSnackbarSeverity("error");
+      setSnackbarMessage(errorMessage);
+      setOpenSnackbar(true);
+    }
+  }
 
 
 
@@ -150,7 +186,7 @@ const WorkExperience = () => {
           <IconButton
             size="small"
             color="primary"
-            onClick={() => console.log("Edit ID:", row.id)}
+            onClick={() => console.log("Edit ID:", row.ID)}
             sx={{ display: { xs: "inline-flex", sm: "none" } }}
           >
             <EditIcon fontSize="small" />
@@ -158,7 +194,7 @@ const WorkExperience = () => {
           <IconButton
             size="small"
             color="error"
-            onClick={() => console.log("Delete ID:", row.id)}
+            onClick={() => console.log("Delete ID:", row.ID)}
             sx={{ display: { xs: "inline-flex", sm: "none" } }}
           >
             <DeleteIcon fontSize="small" />
@@ -168,7 +204,7 @@ const WorkExperience = () => {
             variant="outlined"
             size="small"
             startIcon={<EditIcon />}
-            onClick={() => console.log("Edit ID:", row.id)}
+            onClick={() => console.log("Edit ID:", row.ID)}
             sx={{ display: { xs: "none", sm: "inline-flex" }, textTransform: "none" }}
           >
             Edit
@@ -178,7 +214,10 @@ const WorkExperience = () => {
             size="small"
             color="error"
             startIcon={<DeleteIcon />}
-            onClick={() => console.log("Delete ID:", row.id)}
+            onClick={() => {
+              setSelectedId(row.ID);
+              setIsDeleteDialogOpen(true);
+            }}
             sx={{ display: { xs: "none", sm: "inline-flex" }, textTransform: "none" }}
           >
             Hapus
@@ -276,6 +315,35 @@ const WorkExperience = () => {
           }}
         />
       </Paper>
+
+
+
+      {/* --- KOMPONEN DIALOG HAPUS --- */}
+      <Dialog
+        open={isDeleteDialogOpen}
+        onClose={() => setIsDeleteDialogOpen(false)}
+        title="Hapus Pengalaman?"
+        message="Apakah kamu yakin ingin menghapus pengalaman kerja ini? Data yang sudah dihapus tidak bisa dikembalikan."
+        actions={[
+          {
+            label: "Ya",
+            onClick: handleDeleteConfirm,
+            variant: "contained"
+          },
+          {
+            label: "Batal",
+            onClick: () => setIsDeleteDialogOpen(false),
+            variant: "outlined"
+          }
+        ]}
+      />
+
+      <Snackbar
+        open={openSnackbar}
+        onClose={() => setOpenSnackbar(false)}
+        severity={snackbarSeverity}
+        message={snackbarMessage}
+      />
     </SidebarLayout>
   );
 };

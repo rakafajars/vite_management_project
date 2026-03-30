@@ -5,7 +5,7 @@ import network from "@/utils/network";
 
 
 export interface WorkExperienceResponseData {
-    id: number;
+    ID: number;
     created_at: Date;
     updated_at: Date;
     deleted_at: Date;
@@ -27,7 +27,7 @@ export interface WorkExperienceRequestParams {
 
 
 const WorkExperience = {
-    workExperince({
+    workExperience({
         page = 1,
         limit = 10,
         search = "",
@@ -38,6 +38,11 @@ const WorkExperience = {
                 page, limit, search, sort,
             }
         });
+    },
+
+
+    deleteExperience(id: number) {
+        return network.delete(`/v1/work-experience/${id}`);
     }
 }
 

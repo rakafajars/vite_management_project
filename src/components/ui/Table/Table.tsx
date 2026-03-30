@@ -54,7 +54,7 @@ interface TableProps<T> {
 }
 
 
-const Table = <T extends { id: string | number }>({ columns,
+const Table = <T extends { ID: string | number }>({ columns,
   data,
   isLoading,
   pagination,
@@ -66,8 +66,8 @@ const Table = <T extends { id: string | number }>({ columns,
 
   // Filter kolom berdasarkan layar
   const visibleColumns = isMobile
-    ? columns.filter((col) => !col.hideOnMobile)
-    : columns;
+    ? (columns || []).filter((col) => !col.hideOnMobile)
+    : (columns || []);
 
   if (!isLoading && (!data || data.length === 0)) {
     return (
@@ -129,9 +129,9 @@ const Table = <T extends { id: string | number }>({ columns,
       </TableHead>
 
       <TableBody>
-        {data.map((row) => (
+        {(data || []).map((row) => (
           <TableRow
-            key={row.id}
+            key={row.ID}
             sx={{
               '&:last-child td, &:last-child th': { border: 0 },
               '&:hover': { bgcolor: '#f5f5f5' },

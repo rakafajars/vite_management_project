@@ -35,8 +35,8 @@ const Dialog = ({
     actions
 }: DialogProps): React.ReactElement => {
     return (
-        <BaseDialog 
-            open={open} 
+        <BaseDialog
+            open={open}
             onClose={onClose}
             PaperProps={{
                 sx: {
@@ -52,7 +52,7 @@ const Dialog = ({
             <Box display="flex" justifyContent="center" mb={3}>
                 <img src={ArchitectIcon} alt="Icon" width={100} height={100} />
             </Box>
-            
+
             <DialogTitle sx={{ p: 0, mb: 1.5 }}>
                 <Typography
                     fontFamily="Manrope, sans-serif"
@@ -63,7 +63,7 @@ const Dialog = ({
                     {title}
                 </Typography>
             </DialogTitle>
-            
+
             <DialogContent sx={{ p: 0, mb: 4 }}>
                 <DialogContentText
                     fontFamily="Inter, sans-serif"
@@ -73,9 +73,9 @@ const Dialog = ({
                     {message}
                 </DialogContentText>
             </DialogContent>
-            
+
             {actions && actions.length > 0 && (
-                <DialogActions sx={{ p: 0, justifyContent: 'center', flexDirection: 'column', gap: 1.5 }}>
+                <DialogActions sx={{ p: 0, justifyContent: 'center', flexDirection: 'row', gap: 1.5 }}>
                     {actions.map((item, idx) => (
                         <Button
                             key={idx}
