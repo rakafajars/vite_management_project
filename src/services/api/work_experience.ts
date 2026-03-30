@@ -1,9 +1,6 @@
 import { BaseApiResponse } from "@/types/api";
 import network from "@/utils/network";
 
-
-
-
 export interface WorkExperienceResponseData {
     ID: number;
     created_at: Date;

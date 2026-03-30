@@ -74,9 +74,9 @@ const CVSectionCard: React.FC<CVSectionProps> = ({
         opacity: done ? 1 : 0.6,
         "&:hover": done
           ? {
-              transform: "translateY(-4px)",
-              boxShadow: `0 8px 25px ${alpha(ACCENT, 0.25)}`,
-            }
+            transform: "translateY(-4px)",
+            boxShadow: `0 8px 25px ${alpha(ACCENT, 0.25)}`,
+          }
           : {},
       }}
     >
@@ -210,7 +210,7 @@ const Dashboard = () => {
   const fetchWorkExperience = async () => {
     setIsLoading(true);
     try {
-      const response = await services.workExperience.workExperince();
+      const response = await services.workExperience.workExperience();
       setData(response.data.data ?? []);
     } catch (error) {
       console.error("Gagal mengambil data:", error);
@@ -465,7 +465,7 @@ const Dashboard = () => {
             </Button>
           </Stack>
           <Table<WorkExperienceResponseData>
-            coloumns={columns}
+            columns={columns}
             data={data}
             isLoading={isLoading}
           />

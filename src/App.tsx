@@ -11,6 +11,7 @@ import Register from "./components/pages/Auth/Register";
 import sidebarLoader from "./components/layouts/SidebarLayout/SidebarLayout.loader";
 import authLoader from "./components/pages/Auth/Auth.loader";
 import Skills from "./components/pages/Skills";
+import Project from "./components/pages/Project";
 
 const theme = createTheme({
   typography: {
@@ -37,6 +38,11 @@ const router = createBrowserRouter([
   {
     path: "/skills",
     element: <Skills />,
+    loader: sidebarLoader,
+  },
+  {
+    path: "/project",
+    element: <Project />,
     loader: sidebarLoader,
   },
   {
