@@ -2,118 +2,41 @@ import { Paper, Typography, Box, Stack, Button, IconButton, InputAdornment } fro
 import { Edit as EditIcon, Delete as DeleteIcon, Add as AddIcon, Search as SearchIcon } from "@mui/icons-material";
 import SidebarLayout from "@/components/layouts/SidebarLayout";
 import Table, { Coloumn } from "../../ui/Table/Table";
-import { useEffect, useState } from "react";
 import { SkillsResponseData } from "@/services/api/skills";
 import services from "@/services";
-import { useForm, useWatch } from "react-hook-form";
 import TextField from "@/components/ui/Forms/TextField/TextField";
-import { useDebounce } from 'use-debounce';
-import { BaseApiResponse, BaseMeta } from "@/types/api";
 import Dialog from "@/components/ui/Dialog";
 import Snackbar from "@/components/ui/Snackbar";
-import { AxiosError } from "axios";
+import useTablePage from "@/hooks/useTablePage";
 
 const Skills = () => {
-  const [data, setData] = useState<SkillsResponseData[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-
-  // States untuk UI Pagination dan Search (mocking)
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [boardsMeta, setBoardsMeta] = useState<BaseMeta>();
-
-  // States untuk UI Sort (mocking)
-  const [orderBy, setOrderBy] = useState<string>("name");
-  const [order, setOrder] = useState<"asc" | "desc">("asc");
-
-  const { control } = useForm({
-    defaultValues: {
-      search: "",
-    },
-  });
-
-  const watchSearch = useWatch({
+  const {
+    data,
+    isLoading,
+    meta,
     control,
-    name: 'search'
+    page,
+    rowsPerPage,
+    handleChangePage,
+    handleChangeRowsPerPage,
+    order,
+    orderBy,
+    handleRequestSort,
+    isDeleteDialogOpen,
+    openDeleteDialog,
+    closeDeleteDialog,
+    handleDeleteConfirm,
+    openSnackbar,
+    snackbarMessage,
+    snackbarSeverity,
+    closeSnackbar,
+  } = useTablePage<SkillsResponseData>({
+    defaultOrderBy: "name",
+    fetchFn: (params) => services.skills.skills(params),
+    deleteFn: (id) => services.skills.deleteSkill(id),
+    deleteSuccessMessage: "Berhasil menghapus keahlian",
   });
 
-  const [debounceSearch] = useDebounce(watchSearch, 1000);
-
-  const handleChangePage = (event: unknown, newPage: number) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
-
-  const handleRequestSort = (property: string) => {
-    const isAsc = orderBy === property && order === "asc";
-    setOrder(isAsc ? "desc" : "asc");
-    setOrderBy(property);
-    setPage(0);
-  };
-
-  const fetchSkills = async () => {
-    setIsLoading(true);
-    try {
-      const response = await services.skills.skills({
-        search: debounceSearch,
-        page: page + 1,
-        limit: rowsPerPage,
-        sort: `${orderBy} ${order.toUpperCase()}`
-      });
-      setData(response.data.data ?? []);
-      setBoardsMeta(response.data.meta);
-    } catch (error) {
-      console.error("Gagal mengambil data:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    setPage(0);
-  }, [debounceSearch]);
-
-  useEffect(() => {
-    fetchSkills();
-  }, [debounceSearch, rowsPerPage, page, orderBy, order]);
-
-  const [openSnackbar, setOpenSnackbar] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">("error");
-
-  // State untuk mengontrol buka/tutup dialog
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  // State untuk menyimpan id yang akan dihapus
-  const [selectedId, setSelectedId] = useState<number | null>(null);
-
-  const handleDeleteConfirm = async () => {
-    if (!selectedId) return;
-
-    try {
-      await services.skills.deleteSkill(selectedId);
-
-      setIsDeleteDialogOpen(false);
-      setSnackbarSeverity("success");
-      setSnackbarMessage('Berhasil menghapus keahlian');
-      setOpenSnackbar(true);
-      fetchSkills();
-    } catch (error) {
-      const axiosError = error as AxiosError<BaseApiResponse>;
-      const errorMessage = axiosError.response?.data?.error
-        || axiosError.response?.data?.message
-        || 'Silahkan coba lagi.';
-
-      setSnackbarSeverity("error");
-      setSnackbarMessage(errorMessage);
-      setOpenSnackbar(true);
-    }
-  }
-
-  // Definisi Kolom Tabel
   const columns: Coloumn<SkillsResponseData>[] = [
     {
       id: "name",
@@ -165,10 +88,7 @@ const Skills = () => {
           <IconButton
             size="small"
             color="error"
-            onClick={() => {
-              setSelectedId(row.ID);
-              setIsDeleteDialogOpen(true);
-            }}
+            onClick={() => openDeleteDialog(row.ID)}
             sx={{ display: { xs: "inline-flex", sm: "none" } }}
           >
             <DeleteIcon fontSize="small" />
@@ -188,10 +108,7 @@ const Skills = () => {
             size="small"
             color="error"
             startIcon={<DeleteIcon />}
-            onClick={() => {
-              setSelectedId(row.ID);
-              setIsDeleteDialogOpen(true);
-            }}
+            onClick={() => openDeleteDialog(row.ID)}
             sx={{ display: { xs: "none", sm: "inline-flex" }, textTransform: "none" }}
           >
             Hapus
@@ -278,7 +195,7 @@ const Skills = () => {
           pagination={{
             page,
             rowsPerPage,
-            count: boardsMeta?.total ?? 0,
+            count: meta?.total ?? 0,
             onPageChange: handleChangePage,
             onRowsPerPageChange: handleChangeRowsPerPage,
           }}
@@ -290,29 +207,28 @@ const Skills = () => {
         />
       </Paper>
 
-      {/* --- KOMPONEN DIALOG HAPUS --- */}
       <Dialog
         open={isDeleteDialogOpen}
-        onClose={() => setIsDeleteDialogOpen(false)}
+        onClose={closeDeleteDialog}
         title="Hapus Keahlian?"
         message="Apakah kamu yakin ingin menghapus keahlian ini? Data yang sudah dihapus tidak bisa dikembalikan."
         actions={[
           {
             label: "Ya",
             onClick: handleDeleteConfirm,
-            variant: "contained"
+            variant: "contained",
           },
           {
             label: "Batal",
-            onClick: () => setIsDeleteDialogOpen(false),
-            variant: "outlined"
-          }
+            onClick: closeDeleteDialog,
+            variant: "outlined",
+          },
         ]}
       />
 
       <Snackbar
         open={openSnackbar}
-        onClose={() => setOpenSnackbar(false)}
+        onClose={closeSnackbar}
         severity={snackbarSeverity}
         message={snackbarMessage}
       />
