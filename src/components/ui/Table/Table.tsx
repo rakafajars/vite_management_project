@@ -11,8 +11,12 @@ import {
   TableRow,
   useMediaQuery,
   useTheme,
-  TablePagination,
+  Pagination,
   TableSortLabel,
+  Stack,
+  Typography,
+  Select,
+  MenuItem
 } from "@mui/material";
 import React from "react";
 
@@ -151,16 +155,53 @@ const Table = <T extends { id: string | number }>({ columns,
 
     </BaseTable>
     {pagination && (
-      <TablePagination
-        component="div"
-        count={pagination.count}
-        page={pagination.page}
-        onPageChange={pagination.onPageChange}
-        rowsPerPage={pagination.rowsPerPage}
-        onRowsPerPageChange={pagination.onRowsPerPageChange}
-        rowsPerPageOptions={pagination.rowsPerPageOptions || [5, 10, 25]}
-        labelRowsPerPage="Baris per halaman:"
-      />
+      <Stack
+        direction={{ xs: "column", sm: "row" }}
+        justifyContent="space-between"
+        alignItems="center"
+        spacing={2}
+        sx={{ p: 2, borderTop: '1px solid #e0e0e0' }}
+      >
+        <Stack direction="row" spacing={2} alignItems="center">
+          {pagination.onRowsPerPageChange && (
+            <Stack direction="row" spacing={1} alignItems="center">
+              <Typography variant="body2" color="text.secondary">
+                Baris per halaman:
+              </Typography>
+              <Select
+                size="small"
+                value={pagination.rowsPerPage}
+                onChange={(e) => pagination.onRowsPerPageChange && pagination.onRowsPerPageChange(e as any)}
+                sx={{ fontSize: '0.875rem', '& .MuiSelect-select': { py: 0.5 } }}
+              >
+                {(pagination.rowsPerPageOptions || [5, 10, 25]).map((val) => {
+                  const value = typeof val === 'number' ? val : val.value;
+                  const label = typeof val === 'number' ? val : val.label;
+                  return (
+                    <MenuItem key={value} value={value}>
+                      {label}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </Stack>
+          )}
+          <Typography variant="body2" color="text.secondary">
+            Menampilkan {data.length === 0 ? 0 : pagination.page * pagination.rowsPerPage + 1} -{" "}
+            {Math.min((pagination.page + 1) * pagination.rowsPerPage, pagination.count)} dari{" "}
+            {pagination.count} data
+          </Typography>
+        </Stack>
+        <Pagination
+          count={Math.ceil(pagination.count / pagination.rowsPerPage) || 1}
+          page={pagination.page + 1}
+          onChange={(event, newPage) => pagination.onPageChange(event, newPage - 1)}
+          color="primary"
+          shape="rounded"
+          showFirstButton
+          showLastButton
+        />
+      </Stack>
     )}
   </TableContainer>)
 }
