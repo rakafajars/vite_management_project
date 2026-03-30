@@ -1,4 +1,4 @@
-import { AccountTree, Book, Monitor, Settings, WorkOutline, WorkOutlineOutlined } from "@mui/icons-material";
+import { AccountTree, Book, CastForEducation, Monitor, Settings, WorkOutline, WorkOutlineOutlined } from "@mui/icons-material";
 import {
   Box,
   ListItemIcon,
@@ -38,6 +38,12 @@ const SidebarMenu = ({ onItemClick }: SidebarMenuProps): React.ReactElement => {
       label: "Project",
       path: "/project",
       icon: <AccountTree fontSize="small" />
+    },
+
+    {
+      label: "Education",
+      path: "/education",
+      icon: <CastForEducation fontSize="small" />
     },
     { label: "Pengaturan", path: "/settings", icon: <Settings fontSize="small" /> },
   ];
