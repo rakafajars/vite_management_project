@@ -18,10 +18,26 @@ export interface WorkExperienceResponseData {
     description: string;
 }
 
+export interface WorkExperienceRequestParams {
+    page?: number,
+    search?: string,
+    limit?: number;
+    sort?: string;
+}
+
 
 const WorkExperience = {
-    workExperince() {
-        return network.get<BaseApiResponse<WorkExperienceResponseData[]>>('/v1/work-experience',);
+    workExperince({
+        page = 1,
+        limit = 10,
+        search = "",
+        sort = ""
+    }: WorkExperienceRequestParams = {}) {
+        return network.get<BaseApiResponse<WorkExperienceResponseData[]>>('/v1/work-experience', {
+            params: {
+                page, limit, search, sort,
+            }
+        });
     }
 }
 

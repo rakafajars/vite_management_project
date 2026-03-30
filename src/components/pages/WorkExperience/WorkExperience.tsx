@@ -1,21 +1,75 @@
-import { Paper, Typography, Box, Stack, Chip, Button, IconButton } from "@mui/material";
-import { Edit as EditIcon, Delete as DeleteIcon, Add as AddIcon } from "@mui/icons-material";
+import { Paper, Typography, Box, Stack, Chip, Button, IconButton, InputAdornment } from "@mui/material";
+import { Edit as EditIcon, Delete as DeleteIcon, Add as AddIcon, Search as SearchIcon } from "@mui/icons-material";
 import SidebarLayout from "@/components/layouts/SidebarLayout";
 import Table, { Coloumn } from "../../ui/Table/Table";
 import { useEffect, useState } from "react";
-import { WorkExperienceResponseData } from "@/services/api/work_experience";
+import { WorkExperienceRequestParams, WorkExperienceResponseData } from "@/services/api/work_experience";
 import services from "@/services";
 import dayjs from "dayjs";
+import { useForm, useWatch } from "react-hook-form";
+import TextField from "@/components/ui/Forms/TextField/TextField";
+import { useDebounce } from 'use-debounce';
 
 
 const WorkExperience = () => {
+  // Set Nilai awal di sini
+  const [params, setParams] = useState<WorkExperienceRequestParams>({
+    page: 1,
+    limit: 10,
+    search: '',
+    sort: ''
+  })
+
+
+
   const [data, setData] = useState<WorkExperienceResponseData[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+
+  // States untuk UI Pagination dan Search (mocking)
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  // States untuk UI Sort (mocking)
+  const [orderBy, setOrderBy] = useState<string>("company_name");
+  const [order, setOrder] = useState<"asc" | "desc">("asc");
+
+  const { control } = useForm({
+    defaultValues: {
+      search: "",
+    },
+  });
+
+  const watchSearch = useWatch({
+    control,
+    name: 'search'
+  });
+
+
+  const [debounceSearch] = useDebounce(watchSearch, 1000);
+
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const handleRequestSort = (property: string) => {
+    const isAsc = orderBy === property && order === "asc";
+    setOrder(isAsc ? "desc" : "asc");
+    setOrderBy(property);
+  };
 
   const fetchWorkExperience = async () => {
     setIsLoading(true);
     try {
-      const response = await services.workExperience.workExperince();
+      const response = await services.workExperience.workExperince({
+        ...params,
+        search: debounceSearch,
+        page: page + 1
+      });
       setData(response.data.data ?? []);
     } catch (error) {
       console.error("Gagal mengambil data:", error);
@@ -26,7 +80,9 @@ const WorkExperience = () => {
 
   useEffect(() => {
     fetchWorkExperience();
-  }, []);
+  }, [debounceSearch]);
+
+
 
   // Definisi Kolom Tabel
   const columns: Coloumn<WorkExperienceResponseData>[] = [
@@ -34,6 +90,7 @@ const WorkExperience = () => {
       id: "company_name",
       label: "Perusahaan",
       minWidth: 160,
+      sortable: true,
       render: (row) => (
         <Box>
           <Typography variant="body2" fontWeight="bold" color="#003544">
@@ -49,6 +106,7 @@ const WorkExperience = () => {
       id: "start_date",
       label: "Periode",
       minWidth: 140,
+      sortable: true,
       render: (row) => {
         const start = dayjs(row.start_date).format("MMM YYYY");
         const end = row.is_current
@@ -150,29 +208,71 @@ const WorkExperience = () => {
           direction={{ xs: "column", sm: "row" }}
           justifyContent="space-between"
           alignItems={{ xs: "flex-start", sm: "center" }}
-          spacing={1}
-          sx={{ mb: 2 }}
+          spacing={2}
+          sx={{ mb: 3 }}
         >
           <Typography variant="h6" sx={{ fontWeight: "bold" }}>
             Daftar Pengalaman Kerja
           </Typography>
-          <Button
-            variant="contained"
-            size="small"
-            startIcon={<AddIcon />}
-            sx={{
-              bgcolor: "#003544",
-              textTransform: "none",
-              "&:hover": { bgcolor: "#002530" },
-            }}
-          >
-            Tambah
-          </Button>
+
+          <Stack direction={{ xs: "column", sm: "row" }} spacing={2} alignItems="center" sx={{ width: { xs: "100%", sm: "auto" } }}>
+            <Box sx={{ width: { xs: "100%", sm: 250 } }}>
+              <TextField
+                control={control}
+                name="search"
+                placeholder="Cari pengalaman..."
+                marginBottom={0}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SearchIcon fontSize="small" sx={{ color: "#A3A3A3" }} />
+                    </InputAdornment>
+                  ),
+                }}
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    backgroundColor: "#fff",
+                    borderRadius: "8px",
+                    "& input": {
+                      padding: "8px 14px",
+                      fontSize: "14px",
+                    },
+                  },
+                }}
+              />
+            </Box>
+            <Button
+              variant="contained"
+              size="small"
+              startIcon={<AddIcon />}
+              sx={{
+                bgcolor: "#003544",
+                textTransform: "none",
+                "&:hover": { bgcolor: "#002530" },
+                width: { xs: "100%", sm: "auto" },
+                padding: "8px 16px",
+              }}
+            >
+              Tambah
+            </Button>
+          </Stack>
         </Stack>
         <Table<WorkExperienceResponseData>
-          coloumns={columns}
+          columns={columns}
           data={data}
           isLoading={isLoading}
+          pagination={{
+            page,
+            rowsPerPage,
+            count: data.length > 0 ? data.length : 100,
+            onPageChange: handleChangePage,
+            onRowsPerPageChange: handleChangeRowsPerPage,
+          }}
+          sort={{
+            order,
+            orderBy,
+            onRequestSort: handleRequestSort,
+          }}
         />
       </Paper>
     </SidebarLayout>

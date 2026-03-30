@@ -11,6 +11,8 @@ import {
   TableRow,
   useMediaQuery,
   useTheme,
+  TablePagination,
+  TableSortLabel,
 } from "@mui/material";
 import React from "react";
 
@@ -22,29 +24,46 @@ export interface Coloumn<T> {
   align?: TableCellProps['align'];
   minWidth?: number;
   hideOnMobile?: boolean;
+  sortable?: boolean;
   // render bersifat opsional, jika ada maka kita kirimkan data satu baris (row)
   render?: (row: T) => React.ReactNode;
 }
 
 // 2. Definisi Props Table dengan generic <T>
 interface TableProps<T> {
-  coloumns: Coloumn<T>[];
+  columns: Coloumn<T>[];
   data: T[];
   isLoading?: boolean;
+  pagination?: {
+    page: number;
+    rowsPerPage: number;
+    count: number;
+    onPageChange: (event: unknown, newPage: number) => void;
+    onRowsPerPageChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    rowsPerPageOptions?: number[] | { label: string; value: number }[];
+  };
+  sort?: {
+    orderBy: string;
+    order: 'asc' | 'desc';
+    onRequestSort: (property: string) => void;
+  };
 }
 
 
-const Table = <T extends { id: string | number }>({ coloumns,
+const Table = <T extends { id: string | number }>({ columns,
   data,
-  isLoading, }: TableProps<T>
+  isLoading,
+  pagination,
+  sort,
+}: TableProps<T>
 ): React.ReactElement => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   // Filter kolom berdasarkan layar
   const visibleColumns = isMobile
-    ? coloumns.filter((col) => !col.hideOnMobile)
-    : coloumns;
+    ? columns.filter((col) => !col.hideOnMobile)
+    : columns;
 
   if (!isLoading && (!data || data.length === 0)) {
     return (
@@ -78,6 +97,7 @@ const Table = <T extends { id: string | number }>({ coloumns,
               <TableCell
                 key={coloumn.id}
                 align={coloumn.align || 'left'}
+                sortDirection={sort?.orderBy === coloumn.id ? sort.order : false}
                 sx={{
                   fontWeight: 'bold',
                   color: '#003544',
@@ -87,7 +107,17 @@ const Table = <T extends { id: string | number }>({ coloumns,
                   px: { xs: 1, sm: 2 },
                 }}
               >
-                {coloumn.label}
+                {coloumn.sortable && sort ? (
+                  <TableSortLabel
+                    active={sort.orderBy === coloumn.id}
+                    direction={sort.orderBy === coloumn.id ? sort.order : 'asc'}
+                    onClick={() => sort.onRequestSort(coloumn.id)}
+                  >
+                    {coloumn.label}
+                  </TableSortLabel>
+                ) : (
+                  coloumn.label
+                )}
               </TableCell>
             ))
           }
@@ -120,6 +150,18 @@ const Table = <T extends { id: string | number }>({ coloumns,
       </TableBody>
 
     </BaseTable>
+    {pagination && (
+      <TablePagination
+        component="div"
+        count={pagination.count}
+        page={pagination.page}
+        onPageChange={pagination.onPageChange}
+        rowsPerPage={pagination.rowsPerPage}
+        onRowsPerPageChange={pagination.onRowsPerPageChange}
+        rowsPerPageOptions={pagination.rowsPerPageOptions || [5, 10, 25]}
+        labelRowsPerPage="Baris per halaman:"
+      />
+    )}
   </TableContainer>)
 }
 
