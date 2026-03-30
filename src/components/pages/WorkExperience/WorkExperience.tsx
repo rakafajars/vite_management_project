@@ -9,29 +9,23 @@ import dayjs from "dayjs";
 import { useForm, useWatch } from "react-hook-form";
 import TextField from "@/components/ui/Forms/TextField/TextField";
 import { useDebounce } from 'use-debounce';
+import { BaseMeta } from "@/types/api";
 
 
 const WorkExperience = () => {
-  // Set Nilai awal di sini
-  const [params, setParams] = useState<WorkExperienceRequestParams>({
-    page: 1,
-    limit: 10,
-    search: '',
-    sort: ''
-  })
-
-
-
   const [data, setData] = useState<WorkExperienceResponseData[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   // States untuk UI Pagination dan Search (mocking)
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [boardsMeta, setBoardsMeta] = useState<BaseMeta>();
 
   // States untuk UI Sort (mocking)
   const [orderBy, setOrderBy] = useState<string>("company_name");
   const [order, setOrder] = useState<"asc" | "desc">("asc");
+
+
 
   const { control } = useForm({
     defaultValues: {
@@ -60,17 +54,20 @@ const WorkExperience = () => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
+    setPage(0);
   };
 
   const fetchWorkExperience = async () => {
     setIsLoading(true);
     try {
       const response = await services.workExperience.workExperince({
-        ...params,
         search: debounceSearch,
-        page: page + 1
+        page: page + 1,
+        limit: rowsPerPage,
+        sort: `${orderBy} ${order.toUpperCase()}`
       });
       setData(response.data.data ?? []);
+      setBoardsMeta(response.data.meta);
     } catch (error) {
       console.error("Gagal mengambil data:", error);
     } finally {
@@ -79,8 +76,12 @@ const WorkExperience = () => {
   };
 
   useEffect(() => {
-    fetchWorkExperience();
+    setPage(0);
   }, [debounceSearch]);
+
+  useEffect(() => {
+    fetchWorkExperience();
+  }, [debounceSearch, rowsPerPage, page, orderBy, order]);
 
 
 
@@ -264,7 +265,7 @@ const WorkExperience = () => {
           pagination={{
             page,
             rowsPerPage,
-            count: data.length > 0 ? data.length : 100,
+            count: boardsMeta?.total ?? 0,
             onPageChange: handleChangePage,
             onRowsPerPageChange: handleChangeRowsPerPage,
           }}
