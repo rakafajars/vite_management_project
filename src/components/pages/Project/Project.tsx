@@ -8,6 +8,7 @@ import TextField from "@/components/ui/Forms/TextField/TextField";
 import Dialog from "@/components/ui/Dialog";
 import Snackbar from "@/components/ui/Snackbar";
 import useTablePage from "@/hooks/useTablePage";
+import { useNavigate } from "react-router";
 
 const Project = () => {
   const {
@@ -34,13 +35,15 @@ const Project = () => {
     defaultOrderBy: "title",
     fetchFn: (params) => services.project.project(params),
     deleteFn: (id) => services.project.deleteProject(id),
-    deleteSuccessMessage: "Berhasil menghapus proyek",
+    deleteSuccessMessage: "Berhasil menghapus project",
   });
+
+  const navigate = useNavigate();
 
   const columns: Coloumn<ProjectResponseData>[] = [
     {
       id: "title",
-      label: "Judul Proyek",
+      label: "Judul Project",
       minWidth: 160,
       sortable: true,
       render: (row) => (
@@ -83,7 +86,7 @@ const Project = () => {
       minWidth: 100,
       sortable: true,
       render: (row) => (
-        <Typography variant="body2" color="primary" component="a" href={row.link} target="_blank" rel="noopener noreferrer" sx={{ textDecoration: 'none', '&:hover': { textDecoration: 'underline' }}}>
+        <Typography variant="body2" color="primary" component="a" href={row.link} target="_blank" rel="noopener noreferrer" sx={{ textDecoration: 'none', '&:hover': { textDecoration: 'underline' } }}>
           Lihat
         </Typography>
       ),
@@ -137,10 +140,10 @@ const Project = () => {
 
   return (
     <SidebarLayout
-      pageTitle="Proyek"
+      pageTitle="Project"
       breadcrumbs={[
         {
-          label: "Proyek",
+          label: "Project",
           href: "/project",
         },
       ]}
@@ -160,7 +163,7 @@ const Project = () => {
           sx={{ mb: 3 }}
         >
           <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-            Daftar Proyek
+            Daftar Project
           </Typography>
 
           <Stack direction={{ xs: "column", sm: "row" }} spacing={2} alignItems="center" sx={{ width: { xs: "100%", sm: "auto" } }}>
@@ -168,7 +171,7 @@ const Project = () => {
               <TextField
                 control={control}
                 name="search"
-                placeholder="Cari proyek..."
+                placeholder="Cari Project..."
                 marginBottom={0}
                 InputProps={{
                   startAdornment: (
@@ -200,6 +203,7 @@ const Project = () => {
                 width: { xs: "100%", sm: "auto" },
                 padding: "8px 16px",
               }}
+              onClick={() => navigate('/create-update-project')}
             >
               Tambah
             </Button>
@@ -227,8 +231,8 @@ const Project = () => {
       <Dialog
         open={isDeleteDialogOpen}
         onClose={closeDeleteDialog}
-        title="Hapus Proyek?"
-        message="Apakah kamu yakin ingin menghapus proyek ini? Data yang sudah dihapus tidak bisa dikembalikan."
+        title="Hapus Project?"
+        message="Apakah kamu yakin ingin menghapus project ini? Data yang sudah dihapus tidak bisa dikembalikan."
         actions={[
           {
             label: "Ya",

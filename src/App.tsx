@@ -13,6 +13,7 @@ import authLoader from "./components/pages/Auth/Auth.loader";
 import Skills from "./components/pages/Skills";
 import Project from "./components/pages/Project";
 import Education from "./components/pages/Education";
+import CreateUpdateProject from "./components/pages/Project/CreateUpdateProject";
 
 const theme = createTheme({
   typography: {
@@ -44,6 +45,11 @@ const router = createBrowserRouter([
   {
     path: "/project",
     element: <Project />,
+    loader: sidebarLoader,
+  },
+  {
+    path: "/create-update-project",
+    element: <CreateUpdateProject />,
     loader: sidebarLoader,
   },
   {
