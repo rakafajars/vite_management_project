@@ -2,11 +2,14 @@ import SidebarLayout from "@/components/layouts/SidebarLayout";
 import TextField from "@/components/ui/Forms/TextField/TextField";
 import { Box, Button, Paper, Stack, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router";
 
 const CreateUpdateProject = () => {
 
 
     const { control, handleSubmit } = useForm({})
+
+    const navigate = useNavigate();
 
     return (
         <SidebarLayout
@@ -177,6 +180,7 @@ const CreateUpdateProject = () => {
                                 backgroundColor: "#d32f2f",
                             },
                         }}
+                        onClick={() => navigate("/project")}
                     >
                         Batal
                     </Button>
