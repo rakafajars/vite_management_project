@@ -6,9 +6,9 @@ import { ProjectResponseData } from "@/services/api/project";
 import services from "@/services";
 import TextField from "@/components/ui/Forms/TextField/TextField";
 import Dialog from "@/components/ui/Dialog";
-import Snackbar from "@/components/ui/Snackbar";
 import useTablePage from "@/hooks/useTablePage";
 import { useNavigate } from "react-router";
+import { ROUTES } from "@/constants/routes";
 
 const Project = () => {
   const {
@@ -27,10 +27,6 @@ const Project = () => {
     openDeleteDialog,
     closeDeleteDialog,
     handleDeleteConfirm,
-    openSnackbar,
-    snackbarMessage,
-    snackbarSeverity,
-    closeSnackbar,
   } = useTablePage<ProjectResponseData>({
     defaultOrderBy: "title",
     fetchFn: (params) => services.project.project(params),
@@ -144,7 +140,7 @@ const Project = () => {
       breadcrumbs={[
         {
           label: "Project",
-          href: "/project",
+          href: ROUTES.PROJECT,
         },
       ]}
     >
@@ -203,7 +199,7 @@ const Project = () => {
                 width: { xs: "100%", sm: "auto" },
                 padding: "8px 16px",
               }}
-              onClick={() => navigate('/create-update-project')}
+              onClick={() => navigate(ROUTES.CREATE_UPDATE_PROJECT)}
             >
               Tambah
             </Button>
@@ -245,13 +241,6 @@ const Project = () => {
             variant: "outlined",
           },
         ]}
-      />
-
-      <Snackbar
-        open={openSnackbar}
-        onClose={closeSnackbar}
-        severity={snackbarSeverity}
-        message={snackbarMessage}
       />
     </SidebarLayout>
   );

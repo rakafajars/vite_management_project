@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { useDebounce } from "use-debounce";
-import { AxiosError, AxiosResponse } from "axios";
+import { NetworkError } from "@/utils/network";
 import { BaseApiResponse, BaseMeta } from "@/types/api";
+import toast from "react-hot-toast";
 
 interface FetchParams {
   page: number;
@@ -13,8 +14,8 @@ interface FetchParams {
 
 interface UseTablePageOptions<T> {
   defaultOrderBy: string;
-  fetchFn: (params: FetchParams) => Promise<AxiosResponse<BaseApiResponse<T[]>>>;
-  deleteFn: (id: number) => Promise<AxiosResponse>;
+  fetchFn: (params: FetchParams) => Promise<{ data: BaseApiResponse<T[]> }>;
+  deleteFn: (id: number) => Promise<{ data: any }>;
   deleteSuccessMessage: string;
 }
 
@@ -43,11 +44,6 @@ const useTablePage = <T>({
 
   const watchSearch = useWatch({ control, name: "search" });
   const [debounceSearch] = useDebounce(watchSearch, 1000);
-
-  // Snackbar
-  const [openSnackbar, setOpenSnackbar] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">("error");
 
   // Delete dialog
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -93,20 +89,16 @@ const useTablePage = <T>({
     try {
       await deleteFn(selectedId);
       setIsDeleteDialogOpen(false);
-      setSnackbarSeverity("success");
-      setSnackbarMessage(deleteSuccessMessage);
-      setOpenSnackbar(true);
+      toast.success(deleteSuccessMessage);
       fetchData();
     } catch (error) {
-      const axiosError = error as AxiosError<BaseApiResponse>;
+      const networkError = error as NetworkError<BaseApiResponse>;
       const errorMessage =
-        axiosError.response?.data?.error ||
-        axiosError.response?.data?.message ||
+        networkError.response?.data?.error ||
+        networkError.response?.data?.message ||
         "Silahkan coba lagi.";
 
-      setSnackbarSeverity("error");
-      setSnackbarMessage(errorMessage);
-      setOpenSnackbar(true);
+      toast.error(errorMessage);
     }
   };
 
@@ -117,10 +109,6 @@ const useTablePage = <T>({
 
   const closeDeleteDialog = () => {
     setIsDeleteDialogOpen(false);
-  };
-
-  const closeSnackbar = () => {
-    setOpenSnackbar(false);
   };
 
   useEffect(() => {
@@ -156,12 +144,6 @@ const useTablePage = <T>({
     openDeleteDialog,
     closeDeleteDialog,
     handleDeleteConfirm,
-
-    // Snackbar
-    openSnackbar,
-    snackbarMessage,
-    snackbarSeverity,
-    closeSnackbar,
 
     // Refetch
     fetchData,

@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
+import { ROUTES } from "@/constants/routes";
 
 const SIDEBAR_WIDTH = 280; // Diperlebar sedikit agar lebih premium
 
@@ -112,7 +113,7 @@ const SidebarLayout: React.FC<SidebarLayoutProps> = ({
                 color="inherit"
                 variant="body2"
                 sx={{ cursor: "pointer", opacity: 0.7, "&:hover": { opacity: 1 } }}
-                onClick={() => navigate("/")}
+                onClick={() => navigate(ROUTES.DASHBOARD)}
               >
                 Home
               </Link>

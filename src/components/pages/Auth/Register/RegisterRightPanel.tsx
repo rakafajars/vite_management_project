@@ -2,22 +2,20 @@ import { ArrowForward } from "@mui/icons-material";
 import { Box, Button, Paper, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
+import { ROUTES } from "@/constants/routes";
 
 import TextField from "@/components/ui/Forms/TextField/TextField";
-import Snackbar from "@/components/ui/Snackbar";
 import { useState } from "react";
 import { RegisterPayload, registerSchema } from "@/services/api/auth";
 import { yupResolver } from "@hookform/resolvers/yup";
 import services from "@/services";
-import { AxiosError } from "axios";
+import { NetworkError } from "@/utils/network";
 import { BaseApiResponse } from "@/types/api";
+import toast from "react-hot-toast";
 
 const RegisterRightPanel = () => {
 
   const [loading, setLoading] = useState(false);
-  const [openSnackbar, setOpenSnackbar] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">("error");
 
 
 
@@ -35,16 +33,14 @@ const RegisterRightPanel = () => {
         formValue
       );
 
-      navigate('/login')
+      navigate(ROUTES.LOGIN)
     } catch (error) {
-      const axiosError = error as AxiosError<BaseApiResponse>;
-      const errorMessage = axiosError.response?.data?.error 
-                        || axiosError.response?.data?.message 
+      const networkError = error as NetworkError<BaseApiResponse>;
+      const errorMessage = networkError.response?.data?.error 
+                        || networkError.response?.data?.message 
                         || 'Silahkan coba lagi.';
 
-      setSnackbarSeverity("error");
-      setSnackbarMessage(errorMessage);
-      setOpenSnackbar(true);
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -239,7 +235,7 @@ const RegisterRightPanel = () => {
             }}
           >
             <Typography
-              onClick={() => navigate("/login")}
+              onClick={() => navigate(ROUTES.LOGIN)}
               sx={{
                 fontFamily: "Inter, sans-serif",
                 fontSize: "14px",
@@ -283,12 +279,6 @@ const RegisterRightPanel = () => {
           </Box>
         </Box>
       </Paper>
-      <Snackbar
-        open={openSnackbar}
-        onClose={() => setOpenSnackbar(false)}
-        severity={snackbarSeverity}
-        message={snackbarMessage}
-      />
     </Box>
   );
 };

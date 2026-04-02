@@ -7,8 +7,8 @@ import services from "@/services";
 import dayjs from "dayjs";
 import TextField from "@/components/ui/Forms/TextField/TextField";
 import Dialog from "@/components/ui/Dialog";
-import Snackbar from "@/components/ui/Snackbar";
 import useTablePage from "@/hooks/useTablePage";
+import { ROUTES } from "@/constants/routes";
 
 const Education = () => {
   const {
@@ -27,10 +27,6 @@ const Education = () => {
     openDeleteDialog,
     closeDeleteDialog,
     handleDeleteConfirm,
-    openSnackbar,
-    snackbarMessage,
-    snackbarSeverity,
-    closeSnackbar,
   } = useTablePage<EducationResponseData>({
     defaultOrderBy: "institution",
     fetchFn: (params) => services.education.education(params),
@@ -156,7 +152,7 @@ const Education = () => {
       breadcrumbs={[
         {
           label: "Pendidikan",
-          href: "/education",
+          href: ROUTES.EDUCATION,
         },
       ]}
     >
@@ -256,13 +252,6 @@ const Education = () => {
             variant: "outlined",
           },
         ]}
-      />
-
-      <Snackbar
-        open={openSnackbar}
-        onClose={closeSnackbar}
-        severity={snackbarSeverity}
-        message={snackbarMessage}
       />
     </SidebarLayout>
   );

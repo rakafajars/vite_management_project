@@ -32,6 +32,7 @@ import { WorkExperienceResponseData } from "@/services/api/work_experience";
 import services from "@/services";
 import dayjs from "dayjs";
 import { useNavigate } from "react-router";
+import { ROUTES } from "@/constants/routes";
 
 // ── Warna & Tema ──────────────────────────────────
 const PRIMARY = "#003544";
@@ -254,7 +255,7 @@ const Dashboard = () => {
       icon: <WorkIcon />,
       done: true,
       count: data.length,
-      href: "/pengalaman-kerja",
+      href: ROUTES.WORK_EXPERIENCE,
     },
     {
       title: "Pendidikan",
@@ -452,7 +453,7 @@ const Dashboard = () => {
               variant="outlined"
               size="small"
               endIcon={<ArrowForwardIcon />}
-              onClick={() => navigate("/pengalaman-kerja")}
+              onClick={() => navigate(ROUTES.WORK_EXPERIENCE)}
               sx={{
                 borderColor: ACCENT,
                 color: ACCENT,

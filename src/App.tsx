@@ -14,6 +14,9 @@ import Skills from "./components/pages/Skills";
 import Project from "./components/pages/Project";
 import Education from "./components/pages/Education";
 import CreateUpdateProject from "./components/pages/Project/CreateUpdateProject";
+import { Toaster } from "react-hot-toast";
+import CreateUpdateSkill from "./components/pages/Skills/CreateUpdateSkill";
+import { ROUTES } from "./constants/routes";
 
 const theme = createTheme({
   typography: {
@@ -23,47 +26,52 @@ const theme = createTheme({
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: ROUTES.DASHBOARD,
     element: <Dashboard />,
     loader: sidebarLoader,
   },
   {
-    path: "/login",
+    path: ROUTES.LOGIN,
     element: <Login />,
     loader: authLoader,
   },
   {
-    path: "/pengalaman-kerja",
+    path: ROUTES.WORK_EXPERIENCE,
     element: <PengalamanKerja />,
     loader: sidebarLoader,
   },
   {
-    path: "/skills",
+    path: ROUTES.SKILLS,
     element: <Skills />,
     loader: sidebarLoader,
   },
   {
-    path: "/project",
+    path: ROUTES.CREATE_UPDATE_SKILL,
+    element: <CreateUpdateSkill />,
+    loader: sidebarLoader,
+  },
+  {
+    path: ROUTES.PROJECT,
     element: <Project />,
     loader: sidebarLoader,
   },
   {
-    path: "/create-update-project",
+    path: ROUTES.CREATE_UPDATE_PROJECT,
     element: <CreateUpdateProject />,
     loader: sidebarLoader,
   },
   {
-    path: "/education",
+    path: ROUTES.EDUCATION,
     element: <Education />,
     loader: sidebarLoader,
   },
   {
-    path: "/settings",
+    path: ROUTES.SETTINGS,
     element: <Settings />,
     loader: sidebarLoader,
   },
   {
-    path: "/register",
+    path: ROUTES.REGISTER,
     element: <Register />,
     loader: authLoader,
   },
@@ -74,6 +82,7 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <CssBaseline />
+        <Toaster position="top-right" reverseOrder={false} />
         <RouterProvider router={router} />
       </LocalizationProvider>
     </ThemeProvider>

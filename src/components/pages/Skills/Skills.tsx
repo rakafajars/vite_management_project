@@ -6,8 +6,9 @@ import { SkillsResponseData } from "@/services/api/skills";
 import services from "@/services";
 import TextField from "@/components/ui/Forms/TextField/TextField";
 import Dialog from "@/components/ui/Dialog";
-import Snackbar from "@/components/ui/Snackbar";
 import useTablePage from "@/hooks/useTablePage";
+import { useNavigate } from "react-router";
+import { ROUTES } from "@/constants/routes";
 
 const Skills = () => {
   const {
@@ -26,16 +27,13 @@ const Skills = () => {
     openDeleteDialog,
     closeDeleteDialog,
     handleDeleteConfirm,
-    openSnackbar,
-    snackbarMessage,
-    snackbarSeverity,
-    closeSnackbar,
   } = useTablePage<SkillsResponseData>({
     defaultOrderBy: "name",
     fetchFn: (params) => services.skills.skills(params),
     deleteFn: (id) => services.skills.deleteSkill(id),
     deleteSuccessMessage: "Berhasil menghapus keahlian",
   });
+  const navigate = useNavigate();
 
   const columns: Coloumn<SkillsResponseData>[] = [
     {
@@ -124,7 +122,7 @@ const Skills = () => {
       breadcrumbs={[
         {
           label: "Keahlian",
-          href: "/skills",
+          href: ROUTES.SKILLS,
         },
       ]}
     >
@@ -183,6 +181,7 @@ const Skills = () => {
                 width: { xs: "100%", sm: "auto" },
                 padding: "8px 16px",
               }}
+              onClick={() => navigate(ROUTES.CREATE_UPDATE_SKILL)}
             >
               Tambah
             </Button>
@@ -224,13 +223,6 @@ const Skills = () => {
             variant: "outlined",
           },
         ]}
-      />
-
-      <Snackbar
-        open={openSnackbar}
-        onClose={closeSnackbar}
-        severity={snackbarSeverity}
-        message={snackbarMessage}
       />
     </SidebarLayout>
   );

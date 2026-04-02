@@ -9,21 +9,19 @@ import {
 import { useForm } from "react-hook-form";
 import { ArrowRightAltSharp } from "@mui/icons-material";
 import TextField from "@/components/ui/Forms/TextField/TextField";
-import Snackbar from "@/components/ui/Snackbar";
 import { useNavigate } from "react-router";
 import session from "@/utils/session";
+import { ROUTES } from "@/constants/routes";
 import { useState } from "react";
 import services from "@/services";
 import { LoginPayload, loginSchema } from "@/services/api/auth";
 import { yupResolver } from '@hookform/resolvers/yup';
-import { AxiosError } from "axios";
+import { NetworkError } from "@/utils/network";
 import { BaseApiResponse } from "@/types/api";
+import toast from "react-hot-toast";
 
 const LoginRightPanel = (): React.ReactElement => {
   const [loading, setLoading] = useState(false);
-  const [openSnackbar, setOpenSnackbar] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">("error");
 
   const { control, handleSubmit } = useForm<LoginPayload>({
     resolver: yupResolver(loginSchema),
@@ -44,16 +42,14 @@ const LoginRightPanel = (): React.ReactElement => {
       if (token) {
         session.setSession(token);
       }
-      navigate('/');
+      navigate(ROUTES.DASHBOARD);
     } catch (error) {
-      const axiosError = error as AxiosError<BaseApiResponse>;
-      const errorMessage = axiosError.response?.data?.error
-        || axiosError.response?.data?.message
+      const networkError = error as NetworkError<BaseApiResponse>;
+      const errorMessage = networkError.response?.data?.error
+        || networkError.response?.data?.message
         || 'Silahkan coba lagi.';
 
-      setSnackbarSeverity("error");
-      setSnackbarMessage(errorMessage);
-      setOpenSnackbar(true);
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -237,20 +233,13 @@ const LoginRightPanel = (): React.ReactElement => {
                 fontWeight: "600",
                 cursor: "pointer",
               }}
-              onClick={() => navigate("/register")}
+              onClick={() => navigate(ROUTES.REGISTER)}
             >
               Create an Account
             </span>
           </Typography>
         </Stack>
       </Box>
-
-      <Snackbar
-        open={openSnackbar}
-        onClose={() => setOpenSnackbar(false)}
-        severity={snackbarSeverity}
-        message={snackbarMessage}
-      />
     </Box>
   );
 };

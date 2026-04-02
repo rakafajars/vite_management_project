@@ -7,8 +7,8 @@ import services from "@/services";
 import dayjs from "dayjs";
 import TextField from "@/components/ui/Forms/TextField/TextField";
 import Dialog from "@/components/ui/Dialog";
-import Snackbar from "@/components/ui/Snackbar";
 import useTablePage from "@/hooks/useTablePage";
+import { ROUTES } from "@/constants/routes";
 
 const WorkExperience = () => {
   const {
@@ -27,10 +27,6 @@ const WorkExperience = () => {
     openDeleteDialog,
     closeDeleteDialog,
     handleDeleteConfirm,
-    openSnackbar,
-    snackbarMessage,
-    snackbarSeverity,
-    closeSnackbar,
   } = useTablePage<WorkExperienceResponseData>({
     defaultOrderBy: "company_name",
     fetchFn: (params) => services.workExperience.workExperience(params),
@@ -146,7 +142,7 @@ const WorkExperience = () => {
       breadcrumbs={[
         {
           label: "Pengalaman Kerja",
-          href: "/pengalaman-kerja",
+          href: ROUTES.WORK_EXPERIENCE,
         },
       ]}
     >
@@ -246,13 +242,6 @@ const WorkExperience = () => {
             variant: "outlined",
           },
         ]}
-      />
-
-      <Snackbar
-        open={openSnackbar}
-        onClose={closeSnackbar}
-        severity={snackbarSeverity}
-        message={snackbarMessage}
       />
     </SidebarLayout>
   );

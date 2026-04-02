@@ -18,6 +18,7 @@ import {
 } from "@mui/icons-material";
 import session from "@/utils/session";
 import { useNavigate } from "react-router";
+import { ROUTES } from "@/constants/routes";
 
 interface DropdownOption {
   label: string;
@@ -48,14 +49,14 @@ const Navbar = ({
     {
       label: "Account Settings",
       onClick() {
-        navigate("/settings");
+        navigate(ROUTES.SETTINGS);
       },
     },
     {
       label: "Sign Out",
       onClick() {
         session.clearSession();
-        navigate("/login");
+        navigate(ROUTES.LOGIN);
       },
     },
   ];
@@ -120,7 +121,7 @@ const Navbar = ({
           {/* Branding Logo - Hanya tampil di desktop atau jika drawer nutup */}
           <ButtonBase
             disableRipple
-            onClick={() => navigate("/")}
+            onClick={() => navigate(ROUTES.DASHBOARD)}
             sx={{ display: "flex", alignItems: "center", gap: 1 }}
           >
             <Box

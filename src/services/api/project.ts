@@ -1,5 +1,6 @@
 import { BaseApiResponse } from "@/types/api";
 import network from "@/utils/network";
+import * as Yup from 'yup';
 
 export interface ProjectRequestParams {
     page?: number,
@@ -7,6 +8,17 @@ export interface ProjectRequestParams {
     limit?: number;
     sort?: string;
 }
+
+export const projectSchema = Yup.object({
+    title: Yup.string().required("Nama Project tidak boleh kosong").min(3, "Minimal 3 karakter"),
+    description: Yup.string().required("Description tidak boleh kosong").min(3, "Minimal 3 karakter"),
+    link: Yup.string().required("Link tidak boleh kosong").url("Format link tidak valid"),
+    tech_stack: Yup.string().required("Tech Stack tidak boleh kosong"),
+
+});
+
+
+export type ProjectPayload = Yup.InferType<typeof projectSchema>;
 
 
 export interface ProjectResponseData {
@@ -38,6 +50,11 @@ const project = {
 
     deleteProject(id: number) {
         return network.delete(`/v1/project/${id}`);
+    },
+
+
+    createProject(payload: ProjectPayload) {
+        return network.post<BaseApiResponse>('/v1/project', payload);
     }
 }
 
