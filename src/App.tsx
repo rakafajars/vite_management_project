@@ -17,6 +17,7 @@ import CreateUpdateProject from "./components/pages/Project/CreateUpdateProject"
 import { Toaster } from "react-hot-toast";
 import CreateUpdateSkill from "./components/pages/Skills/CreateUpdateSkill";
 import { ROUTES } from "./constants/routes";
+import CreateUpdateEducation from "./components/pages/Education/CreateUpdateEducation";
 
 const theme = createTheme({
   typography: {
@@ -63,6 +64,11 @@ const router = createBrowserRouter([
   {
     path: ROUTES.EDUCATION,
     element: <Education />,
+    loader: sidebarLoader,
+  },
+  {
+    path: ROUTES.CREATE_UPDATE_EDUCATION,
+    element: <CreateUpdateEducation />,
     loader: sidebarLoader,
   },
   {

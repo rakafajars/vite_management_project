@@ -1,5 +1,6 @@
 import { BaseApiResponse } from "@/types/api";
 import network from "@/utils/network";
+import * as Yup from 'yup';
 
 
 
@@ -25,6 +26,14 @@ export interface SkillsRequestParams {
 }
 
 
+export const skillSchema = Yup.object({
+    name: Yup.string().required(),
+    level: Yup.string().required(),
+    category: Yup.string().required(),
+})
+
+
+export type SkillPayload = Yup.InferType<typeof skillSchema>
 
 const Skills = {
     skills({
@@ -40,15 +49,13 @@ const Skills = {
         });
     },
 
-
-
     deleteSkill(id: number) {
         return network.delete(`/v1/skill/${id}`);
+    },
+
+    createSkill(payload: SkillPayload) {
+        return network.post<BaseApiResponse>("/v1/skill", payload);
     }
 }
-
-
-
-
 
 export default Skills;

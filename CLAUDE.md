@@ -4,161 +4,87 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a React + TypeScript project management application built with Vite, Material-UI (MUI), and React Router. The codebase is currently being migrated from JavaScript to TypeScript.
+A portfolio/CV management application built with React + TypeScript + Vite. Manages work experience, skills, projects, and education entries via a backend API. The UI language is Indonesian (Bahasa Indonesia).
 
 ## Development Commands
 
-### Essential Commands
-
 ```bash
-# Start development server with HMR
-npm run dev
-
-# Build for production
-npm run build
-
-# Preview production build
-npm run preview
-
-# Run linter
-npm run lint
-
-# Format code with Prettier
-npm run format
+npm run dev          # Start dev server (Vite HMR)
+npm run build        # Production build
+npm run lint         # ESLint check
+npm run lint:fix     # ESLint auto-fix
+npm run format       # Prettier format all files
 ```
+
+No test framework is configured. The backend API runs on `localhost:8080` and is proxied via Vite (`/api` → `http://localhost:8080`).
 
 ## Architecture
 
-### Technology Stack
+### Tech Stack
 
-- **Build Tool**: Vite 8.0 with @vitejs/plugin-react (using Oxc)
-- **Framework**: React 19.2 with TypeScript
-- **UI Library**: Material-UI (MUI) v7
-- **Routing**: React Router v7
-- **Forms**: React Hook Form v7
-- **Date Handling**: Day.js with MUI Date Pickers
-- **Styling**: Emotion (CSS-in-JS via MUI)
+- **Vite 8** + **React 19** + **TypeScript** (strict mode)
+- **MUI v7** (Material UI) with Emotion CSS-in-JS
+- **React Router v7** (`createBrowserRouter`)
+- **React Hook Form** + **Yup** for form validation
+- **Day.js** with MUI X Date Pickers
+- **react-hot-toast** for notifications
+
+### Path Alias
+
+`@/` maps to `src/` — configured in both `vite.config.ts` (resolve alias) and `tsconfig.json` (paths). Always use `@/` for imports from `src/`.
 
 ### Project Structure
 
 ```
 src/
-├── component/
-│   ├── layouts/
-│   │   └── SidebarLayout/     # Main layout with sidebar and navbar
-│   │       ├── SidebarLayout.tsx
-│   │       ├── Sidebar/
-│   │       └── Navbar/
-│   ├── pages/                  # Page components
-│   │   ├── Auth/Login/
+├── components/
+│   ├── layouts/SidebarLayout/   # Main authenticated layout (sidebar + navbar)
+│   ├── pages/                   # Page components organized by domain
+│   │   ├── Auth/Login/, Auth/Register/
 │   │   ├── Dashboard/
-│   │   └── Project/DetailProject/
-│   └── ui/                     # Reusable UI components
-│       ├── Avatar/
-│       ├── Forms/
-│       │   ├── DatePicker/
-│       │   ├── Dropdown/
-│       │   ├── Select/
-│       │   └── TextField/
-│       ├── Modal/
-│       ├── Pagination/
-│       └── Table/
-├── App.tsx                     # Router configuration
-└── main.tsx                    # Application entry point
+│   │   ├── Education/, Education/CreateUpdateEducation/
+│   │   ├── Project/, Project/CreateUpdateProject/
+│   │   ├── Skills/, Skills/CreateUpdateSkill/
+│   │   ├── WorkExperience/
+│   │   └── Settings/
+│   └── ui/                      # Reusable UI components (MUI wrappers)
+├── constants/routes.ts          # Centralized route path constants (ROUTES object)
+├── services/
+│   ├── index.ts                 # Aggregates all API modules
+│   └── api/                     # API modules: auth, education, project, skills, work_experience
+├── types/api.ts                 # Shared API response types
+├── utils/
+│   ├── network.ts               # Fetch-based HTTP client (auto-attaches Bearer token)
+│   └── session.ts               # Token storage (localStorage)
+├── App.tsx                      # Router config + theme + providers
+└── main.tsx                     # Entry point
 ```
 
-### Key Architectural Patterns
+### Key Patterns
 
-**Layout System**: Pages use the `SidebarLayout` component which provides:
+**Authentication**: Token-based auth stored via `session.ts`. Two route loaders enforce access:
+- `sidebarLoader` — redirects unauthenticated users to `/login` (used by all protected pages)
+- `authLoader` — redirects authenticated users away from login/register to `/`
 
-- Fixed sidebar navigation
-- Top navbar
-- Breadcrumb support via `breadcrumbs` prop (array of `{label, href}` objects)
-- Page title via `pageTitle` prop
-- Main content area with proper margins (30px left margin for sidebar)
+**API Layer**: `utils/network.ts` is a custom fetch wrapper (not Axios). It provides `get`, `post`, `put`, `patch`, `delete` methods, auto-sets `Authorization: Bearer <token>`, and throws `NetworkError` on non-OK responses. On 401, the session is automatically cleared. Each domain API module (e.g., `services/api/project.ts`) co-locates its Yup validation schemas, TypeScript payload/response types, and API call functions.
 
-**Routing**: Configured in `App.tsx` using `createBrowserRouter`:
+**Layout System**: Authenticated pages wrap content in `SidebarLayout`, which provides a fixed 280px sidebar (hidden on mobile), top navbar, breadcrumbs, and page title. The sidebar collapses to a drawer below the `lg` breakpoint (1200px).
 
-- `/` - Dashboard (main page)
-- `/login` - Login page
-- `/projects/:id` - Project detail page
+**Routing**: All route paths are defined as constants in `constants/routes.ts` via the `ROUTES` object. New routes must be added there and referenced by constant, not hardcoded strings.
 
-**Theming**: Custom MUI theme configured in `App.tsx`:
+**Form Pages**: CRUD pages follow a `CreateUpdate<Entity>` naming convention and handle both create and edit in one component. Forms use `react-hook-form` with `@hookform/resolvers` for Yup schema validation.
 
-- Default font: Roboto
-- Wrapped with `LocalizationProvider` (Day.js adapter for date components)
-- `CssBaseline` applied for consistent base styles
+## Code Style
 
-**Component Pattern**: Components follow TypeScript interface-based props with `React.FC<Props>` pattern.
+- ESLint enforces import ordering (builtin → external → internal → parent → sibling → index, alphabetically sorted within groups, newlines between groups)
+- Prettier: semicolons, single quotes, trailing commas, 2-space indent
+- Components use `React.FC<Props>` with TypeScript interfaces
+- Default exports for components
+- Unused variables prefixed with `_` are allowed; all others are errors
 
-## Code Style and Linting
+## Theming
 
-### ESLint Configuration
-
-The project uses a comprehensive ESLint setup (eslint.config.js) with:
-
-- React 17+ JSX transform (no need to import React in scope)
-- React Hooks rules enforced
-- JSX accessibility (a11y) rules
-- Import order enforcement:
-  - Groups: builtin → external → internal → parent → sibling → index
-  - Alphabetical sorting within groups
-  - Newlines between groups required
-- Console.log statements trigger warnings
-- Unused variables are errors (except those prefixed with `_`)
-- Self-closing components enforced
-- Prop-types validation disabled (using TypeScript instead)
-
-### Prettier Configuration
-
-Configured in `.prettier.json`:
-
-- Semicolons: required
-- Single quotes: true (note: config has typo "singleQuota" instead of "singleQuote")
-- Trailing commas: all
-- Tab width: 2
-
-## TypeScript Migration Notes
-
-The codebase is actively being migrated from JavaScript to TypeScript:
-
-- Source files use `.tsx` extension for components
-- Strict mode enabled in tsconfig.json
-- Target: ESNext with react-jsx transform
-- Many components already have proper TypeScript interfaces
-
-When adding new components:
-
-- Define interface for props with descriptive names (e.g., `SidebarLayoutProps`)
-- Use `React.FC<PropsInterface>` for function components
-- Define interfaces for data structures (e.g., `BreadcrumbsItem`)
-- Explicitly type useState hooks when needed
-
-## Component Development
-
-### Reusable UI Components
-
-All reusable components live in `src/component/ui/`. These are custom wrappers around MUI components. When creating new components:
-
-- Place in appropriate subdirectory under `ui/`
-- Export as default from the component file
-- Use TypeScript interfaces for props
-- Follow Material-UI theming patterns
-
-### Forms
-
-Form components in `src/component/ui/Forms/` include:
-
-- TextField - Text input wrapper
-- Select - Dropdown select wrapper
-- DatePicker - Date picker using MUI X Date Pickers
-- Dropdown - Custom dropdown component
-
-Project uses `react-hook-form` for form state management.
-
-## Important Notes
-
-- The sidebar layout applies `marginLeft: 30` (30px) to the main content area to account for the fixed sidebar
-- Breadcrumbs are rendered inside the `SidebarLayout` component via the `renderBreadcrumbs()` function
-- Router uses React Router v7 `createBrowserRouter` API (not the legacy BrowserRouter)
-- MUI components require the `LocalizationProvider` wrapper for date pickers to function
+- Font family: **Manrope** (not Roboto)
+- Custom MUI theme defined in `App.tsx`
+- `CssBaseline` applied globally
+- `LocalizationProvider` with Day.js adapter wraps the app for date pickers

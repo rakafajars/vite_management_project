@@ -6,6 +6,7 @@ import * as Yup from 'yup';
 export const loginSchema = Yup.object({
     email: Yup.string().email("Format email salah").required("Email wajib diisi"),
     password: Yup.string().min(6, "Minimal 6 karakter").required("Password wajib diisi"),
+    remember_me: Yup.boolean().default(false),
 });
 
 

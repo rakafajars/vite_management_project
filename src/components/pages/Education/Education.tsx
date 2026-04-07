@@ -9,6 +9,7 @@ import TextField from "@/components/ui/Forms/TextField/TextField";
 import Dialog from "@/components/ui/Dialog";
 import useTablePage from "@/hooks/useTablePage";
 import { ROUTES } from "@/constants/routes";
+import { useNavigate } from "react-router";
 
 const Education = () => {
   const {
@@ -33,6 +34,8 @@ const Education = () => {
     deleteFn: (id) => services.education.deleteEducation(id),
     deleteSuccessMessage: "Berhasil menghapus pendidikan",
   });
+
+  const navigate = useNavigate();
 
   const columns: Coloumn<EducationResponseData>[] = [
     {
@@ -211,6 +214,7 @@ const Education = () => {
                 width: { xs: "100%", sm: "auto" },
                 padding: "8px 16px",
               }}
+              onClick={() => navigate(ROUTES.CREATE_UPDATE_EDUCATION)}
             >
               Tambah
             </Button>

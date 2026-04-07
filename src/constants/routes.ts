@@ -8,5 +8,6 @@ export const ROUTES = {
   PROJECT: '/project',
   CREATE_UPDATE_PROJECT: '/create-update-project',
   EDUCATION: '/education',
+  CREATE_UPDATE_EDUCATION: '/create-update-education',
   SETTINGS: '/settings',
 } as const;

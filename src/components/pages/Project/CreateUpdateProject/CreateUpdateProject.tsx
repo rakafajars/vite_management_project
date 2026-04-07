@@ -5,7 +5,8 @@ import { ProjectPayload, projectSchema } from "@/services/api/project";
 import { BaseApiResponse } from "@/types/api";
 import { NetworkError } from "@/utils/network";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Box, Button, Paper, Stack, Typography } from "@mui/material";
+import { Box, Paper, Typography } from "@mui/material";
+import FormActions from "@/components/ui/FormActions";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
@@ -188,60 +189,14 @@ const CreateUpdateProject = () => {
                         />
                     </Box>
 
-                    <Box sx={{
-                        display: "flex",
-                        gap: 1,
-                        width: "100%",
-                        mt: 2
-                    }}>
-                        <Button
-                            type="button"
-                            variant="contained"
-                            color="error"
-                            sx={{
-                                flex: 1,
-                                borderRadius: "10px",
-                                px: { xs: 3, md: 4 },
-                                py: { xs: 1.5, md: 1.75 },
-                                fontSize: { xs: "14px", md: "15px" },
-                                fontWeight: 600,
-                                textTransform: "none",
-                                boxShadow: "0px 4px 12px 0px rgba(0, 53, 68, 0.15)",
-                                "&:hover": {
-                                    backgroundColor: "#d32f2f",
-                                },
-                            }}
-                            onClick={() => navigate(ROUTES.PROJECT)}
-                        >
-                            Batal
-                        </Button>
-                        <Button
-                            type="submit"
-                            variant="contained"
-                            loading={loading}
-                            sx={{
-                                flex: 1,
-                                backgroundColor: "#003544",
-                                borderRadius: "10px",
-                                px: { xs: 3, md: 4 },
-                                py: { xs: 1.5, md: 1.75 },
-                                fontSize: { xs: "14px", md: "15px" },
-                                fontWeight: 600,
-                                textTransform: "none",
-                                boxShadow: "0px 4px 12px 0px rgba(0, 53, 68, 0.15)",
-                                "&:hover": {
-                                    backgroundColor: "#002a35",
-                                    boxShadow: "0px 6px 16px 0px rgba(0, 53, 68, 0.25)",
-                                },
-                            }}
-                        >
-                            Tambah
-                        </Button>
-                    </Box>
+                    <FormActions
+                        onCancel={() => navigate(ROUTES.PROJECT)}
+                        loading={loading}
+                    />
                 </Box>
             </Paper>
         </SidebarLayout>
     );
 }
 
-export default CreateUpdateProject
+export default CreateUpdateProject;

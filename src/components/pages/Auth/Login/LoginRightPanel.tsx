@@ -1,14 +1,13 @@
 import {
   Box,
   Button,
-  Checkbox,
-  FormControlLabel,
   Stack,
   Typography,
 } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { ArrowRightAltSharp } from "@mui/icons-material";
 import TextField from "@/components/ui/Forms/TextField/TextField";
+import Checkbox from "@/components/ui/Forms/Checkbox/Checkbox";
 import { useNavigate } from "react-router";
 import session from "@/utils/session";
 import { ROUTES } from "@/constants/routes";
@@ -160,43 +159,10 @@ const LoginRightPanel = (): React.ReactElement => {
               }
             />
 
-            <FormControlLabel
-              sx={{
-                paddingTop: "32px",
-                gap: "8px",
-                margin: 0,
-                "& .MuiFormControlLabel-label": {
-                  margin: 0,
-                },
-              }}
-              control={
-                <Checkbox
-                  defaultChecked={false}
-                  sx={{
-                    padding: "0",
-                    color: "#E7E8E9",
-                    "& .MuiSvgIcon-root": {
-                      fontSize: 20, // Opsional: mengatur ukuran icon
-                      color: "#E7E8E9",
-                    },
-                    "&.Mui-checked .MuiSvgIcon-root": {
-                      color: "#003544",
-                    },
-                  }}
-                />
-              }
-              label={
-                <Typography
-                  sx={{
-                    fontFamily: "Inter, sans-serif",
-                    fontWeight: 500,
-                    fontSize: "14px",
-                    color: "#4C616C",
-                  }}
-                >
-                  Remember this device
-                </Typography>
-              }
+            <Checkbox
+              control={control}
+              name="remember_me"
+              label="Remember this device"
             />
           </Box>
           <Button
