@@ -78,7 +78,7 @@ const Skills = () => {
           <IconButton
             size="small"
             color="primary"
-            onClick={() => console.log("Edit ID:", row.ID)}
+            onClick={() => navigate(ROUTES.CREATE_UPDATE_SKILL.replace(':id?', String(row.ID)))}
             sx={{ display: { xs: "inline-flex", sm: "none" } }}
           >
             <EditIcon fontSize="small" />
@@ -96,7 +96,7 @@ const Skills = () => {
             variant="outlined"
             size="small"
             startIcon={<EditIcon />}
-            onClick={() => console.log("Edit ID:", row.ID)}
+            onClick={() => navigate(ROUTES.CREATE_UPDATE_SKILL.replace(':id?', String(row.ID)))}
             sx={{ display: { xs: "none", sm: "inline-flex" }, textTransform: "none" }}
           >
             Edit
@@ -181,7 +181,7 @@ const Skills = () => {
                 width: { xs: "100%", sm: "auto" },
                 padding: "8px 16px",
               }}
-              onClick={() => navigate(ROUTES.CREATE_UPDATE_SKILL)}
+              onClick={() => navigate(ROUTES.CREATE_UPDATE_SKILL.replace('/:id?', ''))}
             >
               Tambah
             </Button>

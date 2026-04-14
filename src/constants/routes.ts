@@ -5,7 +5,7 @@ export const ROUTES = {
   WORK_EXPERIENCE: '/pengalaman-kerja',
   CREATE_UPDATE_WORK_EXPERIENCE: '/create-update-pengalaman-kerja',
   SKILLS: '/skills',
-  CREATE_UPDATE_SKILL: '/create-update-skill',
+  CREATE_UPDATE_SKILL: '/create-update-skill/:id?',
   PROJECT: '/project',
   CREATE_UPDATE_PROJECT: '/create-update-project/:id?',
   EDUCATION: '/education',

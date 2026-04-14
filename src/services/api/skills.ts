@@ -55,7 +55,14 @@ const Skills = {
 
     createSkill(payload: SkillPayload) {
         return network.post<BaseApiResponse>("/v1/skill", payload);
-    }
+    },
+    detailSkill(id: number) {
+        return network.get<BaseApiResponse<SkillsResponseData>>(`/v1/skill/${id}`);
+    },
+
+    updateSkill(payload: SkillPayload, id: number) {
+        return network.put<BaseApiResponse>(`/v1/skill/${id}`, payload);
+    },
 }
 
 export default Skills;
