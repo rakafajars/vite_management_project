@@ -1,5 +1,6 @@
 import { BaseApiResponse } from "@/types/api";
 import network from "@/utils/network";
+import * as Yup from 'yup';
 
 export interface WorkExperienceResponseData {
     ID: number;
@@ -23,6 +24,19 @@ export interface WorkExperienceRequestParams {
 }
 
 
+
+export const workExperienceSchema = Yup.object({
+    company_name: Yup.string().required("Company Name tidak boleh kosong").min(3, "Minimal 3 karakter"),
+    position: Yup.string().required("Position Name tidak boleh kosong").min(3, "Minimal 3 karakter"),
+    start_date: Yup.string().required("Start Date tidak boleh kosong"),
+    end_date: Yup.string().required("End Date tidak boleh kosong"),
+    is_current: Yup.boolean().required("Is Current tidak boleh kosong"),
+    description: Yup.string().required("Description tidak boleh kosong").min(3, "Minimal 3 karakter"),
+})
+
+export type WorkExperiencePayload = Yup.InferType<typeof workExperienceSchema>;
+
+
 const WorkExperience = {
     workExperience({
         page = 1,
@@ -40,6 +54,12 @@ const WorkExperience = {
 
     deleteExperience(id: number) {
         return network.delete(`/v1/work-experience/${id}`);
+    },
+
+
+    createWorkExperience(payload: WorkExperiencePayload) {
+        return network.post<BaseApiResponse>('/v1/work-experience', payload);
+
     }
 }
 

@@ -55,6 +55,14 @@ const project = {
 
     createProject(payload: ProjectPayload) {
         return network.post<BaseApiResponse>('/v1/project', payload);
+    },
+
+    updateProject(payload: ProjectPayload, id: number) {
+        return network.put<BaseApiResponse>(`/v1/project/${id}`, payload);
+    },
+
+    DetailProject(id: number) {
+        return network.get<BaseApiResponse<ProjectResponseData>>(`/v1/project/${id}`);
     }
 }
 

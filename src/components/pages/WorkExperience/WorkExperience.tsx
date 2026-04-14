@@ -9,6 +9,7 @@ import TextField from "@/components/ui/Forms/TextField/TextField";
 import Dialog from "@/components/ui/Dialog";
 import useTablePage from "@/hooks/useTablePage";
 import { ROUTES } from "@/constants/routes";
+import { useNavigate } from "react-router";
 
 const WorkExperience = () => {
   const {
@@ -33,6 +34,8 @@ const WorkExperience = () => {
     deleteFn: (id) => services.workExperience.deleteExperience(id),
     deleteSuccessMessage: "Berhasil menghapus pengalaman kerja",
   });
+
+  const navigate = useNavigate();
 
   const columns: Coloumn<WorkExperienceResponseData>[] = [
     {
@@ -201,6 +204,7 @@ const WorkExperience = () => {
                 width: { xs: "100%", sm: "auto" },
                 padding: "8px 16px",
               }}
+              onClick={() => navigate(ROUTES.CREATE_UPDATE_WORK_EXPERIENCE,)}
             >
               Tambah
             </Button>

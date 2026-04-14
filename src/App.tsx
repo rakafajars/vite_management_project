@@ -18,6 +18,7 @@ import { Toaster } from "react-hot-toast";
 import CreateUpdateSkill from "./components/pages/Skills/CreateUpdateSkill";
 import { ROUTES } from "./constants/routes";
 import CreateUpdateEducation from "./components/pages/Education/CreateUpdateEducation";
+import CreateUpdateWorkExperience from "./components/pages/WorkExperience/CreateUpdateWorkExperience";
 
 const theme = createTheme({
   typography: {
@@ -39,6 +40,11 @@ const router = createBrowserRouter([
   {
     path: ROUTES.WORK_EXPERIENCE,
     element: <PengalamanKerja />,
+    loader: sidebarLoader,
+  },
+  {
+    path: ROUTES.CREATE_UPDATE_WORK_EXPERIENCE,
+    element: <CreateUpdateWorkExperience />,
     loader: sidebarLoader,
   },
   {

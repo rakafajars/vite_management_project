@@ -160,8 +160,6 @@ const CreateUpdateEducation = () => {
                     />
                 </Box>
 
-                {/* TODO: MEMBUAT START DATE DAN END DATE */}
-
                 <Box sx={{ mb: { xs: 2, md: 2.5 } }}>
                     <DatePicker control={control} name="start_date" label="Tanggal Kuliah" />
                     <DatePicker control={control} name="end_date" label="Selesai Kuliah" />

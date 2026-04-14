@@ -96,7 +96,7 @@ const Project = () => {
           <IconButton
             size="small"
             color="primary"
-            onClick={() => console.log("Edit ID:", row.ID)}
+            onClick={() => navigate(ROUTES.CREATE_UPDATE_PROJECT.replace(':id?', String(row.ID)))}
             sx={{ display: { xs: "inline-flex", sm: "none" } }}
           >
             <EditIcon fontSize="small" />
@@ -114,7 +114,7 @@ const Project = () => {
             variant="outlined"
             size="small"
             startIcon={<EditIcon />}
-            onClick={() => console.log("Edit ID:", row.ID)}
+            onClick={() => navigate(ROUTES.CREATE_UPDATE_PROJECT.replace(':id?', String(row.ID)))}
             sx={{ display: { xs: "none", sm: "inline-flex" }, textTransform: "none" }}
           >
             Edit
@@ -199,7 +199,7 @@ const Project = () => {
                 width: { xs: "100%", sm: "auto" },
                 padding: "8px 16px",
               }}
-              onClick={() => navigate(ROUTES.CREATE_UPDATE_PROJECT)}
+              onClick={() => navigate(ROUTES.CREATE_UPDATE_PROJECT.replace('/:id?', ''))}
             >
               Tambah
             </Button>

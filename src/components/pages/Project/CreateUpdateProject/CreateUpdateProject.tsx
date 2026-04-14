@@ -7,28 +7,68 @@ import { NetworkError } from "@/utils/network";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Box, Paper, Typography } from "@mui/material";
 import FormActions from "@/components/ui/FormActions";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import toast from "react-hot-toast";
 import { ROUTES } from "@/constants/routes";
 
 const CreateUpdateProject = () => {
 
+    const { id } = useParams(); // mengambil id dari url
+    const isEdit = Boolean(id); // jika ada ID, berarti sedang edit
+
+
     const [loading, setLoading] = useState(false);
-    const { control, handleSubmit } = useForm<ProjectPayload>({
+    const { control, handleSubmit, reset } = useForm<ProjectPayload>({
         resolver: yupResolver(projectSchema),
     })
+
+    useEffect(() => {
+        if (isEdit && id) {
+            const fetchDetailProject = async () => {
+                try {
+                    const response = await services.project.DetailProject(Number(id))
+
+                    if (response.data.data) {
+                        const project = response.data.data;
+                        reset({
+                            title: project.title,
+                            description: project.description,
+                            link: project.link,
+                            tech_stack: project.tech_stack,
+                        });
+                    }
+                } catch (error) {
+                    const networkError = error as NetworkError<BaseApiResponse>;
+                    const errorMessage = networkError.response?.data?.error
+                        || networkError.response?.data?.message
+                        || 'Silahkan coba lagi.';
+                    toast.error(errorMessage)
+                }
+            }
+
+
+            fetchDetailProject();
+        }
+    }, [id, isEdit, reset])
 
 
     const onSubmit = async (formValue: ProjectPayload) => {
         setLoading(true);
 
         try {
-            const response = await services.project.createProject(formValue);
+            let response;
+
+            if (isEdit && id) {
+                response = await services.project.updateProject(formValue, Number(id));
+            } else {
+                response = await services.project.createProject(formValue);
+            }
+
             navigate(ROUTES.PROJECT)
 
-            toast.success(response.data.message ?? "Berhasil Membuat Project");
+            toast.success(response.data.message ?? (isEdit && id ? "Berhasil Mengubah Project" : "Berhasil Membuat Project"));
         } catch (error) {
             const networkError = error as NetworkError<BaseApiResponse>;
             const errorMessage = networkError.response?.data?.error
@@ -53,7 +93,7 @@ const CreateUpdateProject = () => {
                     href: ROUTES.PROJECT,
                 },
                 {
-                    label: "Create Project",
+                    label: isEdit ? "Update Project" : "Create Project",
                     href: ROUTES.CREATE_UPDATE_PROJECT
                 }
             ]}
