@@ -205,34 +205,67 @@ const StatCard: React.FC<StatCardProps> = ({
 // ── Dashboard Component ───────────────────────────
 const Dashboard = () => {
   const navigate = useNavigate();
-  const [data, setData] = useState<WorkExperienceResponseData[]>([]);
+  const [workExpData, setWorkExpData] = useState<WorkExperienceResponseData[]>([]);
+  const [educationData, setEducationData] = useState([]);
+  const [skillsData, setSkillsData] = useState([]);
+  const [projectData, setProjectData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const fetchWorkExperience = async () => {
-    setIsLoading(true);
     try {
       const response = await services.workExperience.workExperience();
-      setData(response.data.data ?? []);
+      setWorkExpData(response.data.data ?? []);
     } catch (error) {
-      console.error("Gagal mengambil data:", error);
-    } finally {
-      setIsLoading(false);
+      console.error("Gagal mengambil data pengalaman kerja:", error);
+    }
+  };
+
+  const fetchEducation = async () => {
+    try {
+      const response = await services.education.education();
+      setEducationData(response.data.data ?? []);
+    } catch (error) {
+      console.error("Gagal mengambil data pendidikan:", error);
+    }
+  };
+
+  const fetchSkills = async () => {
+    try {
+      const response = await services.skills.skills();
+      setSkillsData(response.data.data ?? []);
+    } catch (error) {
+      console.error("Gagal mengambil data keahlian:", error);
+    }
+  };
+
+  const fetchProject = async () => {
+    try {
+      const response = await services.project.project();
+      setProjectData(response.data.data ?? []);
+    } catch (error) {
+      console.error("Gagal mengambil data proyek:", error);
     }
   };
 
   useEffect(() => {
-    fetchWorkExperience();
+    setIsLoading(true);
+    Promise.all([
+      fetchWorkExperience(),
+      fetchEducation(),
+      fetchSkills(),
+      fetchProject(),
+    ]).finally(() => setIsLoading(false));
   }, []);
 
   // ── Derived stats ──
   const stats = useMemo(() => {
-    const totalExperience = data.length;
-    const activePosisi = data.filter((d) => d.is_current).length;
-    const uniqueCompanies = new Set(data.map((d) => d.company_name)).size;
+    const totalExperience = workExpData.length;
+    const activePosisi = workExpData.filter((d) => d.is_current).length;
+    const uniqueCompanies = new Set(workExpData.map((d) => d.company_name)).size;
 
     // Hitung durasi terlama
     let longestYears = 0;
-    data.forEach((d) => {
+    workExpData.forEach((d) => {
       const start = dayjs(d.start_date);
       const end = d.is_current ? dayjs() : dayjs(d.end_date);
       const years = end.diff(start, "year", true);
@@ -245,7 +278,7 @@ const Dashboard = () => {
       uniqueCompanies,
       longestYears: longestYears > 0 ? `${longestYears.toFixed(1)} thn` : "-",
     };
-  }, [data]);
+  }, [workExpData]);
 
   // ── Definisi CV sections ──
   const cvSections: CVSectionProps[] = [
@@ -254,26 +287,32 @@ const Dashboard = () => {
       description: "Riwayat pekerjaan & posisi",
       icon: <WorkIcon />,
       done: true,
-      count: data.length,
+      count: workExpData.length,
       href: ROUTES.WORK_EXPERIENCE,
     },
     {
       title: "Pendidikan",
       description: "Riwayat pendidikan formal",
       icon: <SchoolIcon />,
-      done: false,
+      done: true,
+      count: educationData.length,
+      href: ROUTES.EDUCATION,
     },
     {
       title: "Keahlian",
       description: "Skill teknis & soft skill",
       icon: <PsychologyIcon />,
-      done: false,
+      done: true,
+      count: skillsData.length,
+      href: ROUTES.SKILLS,
     },
     {
       title: "Proyek",
       description: "Portfolio & proyek pribadi",
       icon: <CodeIcon />,
-      done: false,
+      done: true,
+      count: projectData.length,
+      href: ROUTES.PROJECT,
     },
   ];
 
@@ -467,7 +506,7 @@ const Dashboard = () => {
           </Stack>
           <Table<WorkExperienceResponseData>
             columns={columns}
-            data={data}
+            data={workExpData}
             isLoading={isLoading}
           />
         </Paper>
