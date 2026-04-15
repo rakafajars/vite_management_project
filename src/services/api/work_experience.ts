@@ -10,8 +10,8 @@ export interface WorkExperienceResponseData {
     user_id: number;
     company_name: string;
     position: string;
-    start_date: Date;
-    end_date: Date | null;
+    start_date: string;
+    end_date: string | null;
     is_current: boolean;
     description: string;
 }
@@ -29,12 +29,22 @@ export const workExperienceSchema = Yup.object({
     company_name: Yup.string().required("Company Name tidak boleh kosong").min(3, "Minimal 3 karakter"),
     position: Yup.string().required("Position Name tidak boleh kosong").min(3, "Minimal 3 karakter"),
     start_date: Yup.string().required("Start Date tidak boleh kosong"),
-    end_date: Yup.string().required("End Date tidak boleh kosong"),
+    end_date: Yup.string().nullable().when('is_current', {
+        is: false,
+        then: (schema) => schema.required("End Date tidak boleh kosong"),
+    }),
     is_current: Yup.boolean().required("Is Current tidak boleh kosong"),
     description: Yup.string().required("Description tidak boleh kosong").min(3, "Minimal 3 karakter"),
 })
 
-export type WorkExperiencePayload = Yup.InferType<typeof workExperienceSchema>;
+export interface WorkExperiencePayload {
+    company_name: string;
+    position: string;
+    start_date: string;
+    end_date?: string | null;
+    is_current: boolean;
+    description: string;
+}
 
 
 const WorkExperience = {
@@ -60,7 +70,15 @@ const WorkExperience = {
     createWorkExperience(payload: WorkExperiencePayload) {
         return network.post<BaseApiResponse>('/v1/work-experience', payload);
 
-    }
+    },
+
+    detailWorkExperience(id: number) {
+        return network.get<BaseApiResponse<WorkExperienceResponseData>>(`/v1/work-experience/${id}`);
+    },
+
+    updateWorkExperience(payload: WorkExperiencePayload, id: number) {
+        return network.put<BaseApiResponse>(`/v1/work-experience/${id}`, payload);
+    },
 }
 
 

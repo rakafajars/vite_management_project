@@ -33,10 +33,6 @@ const CreateUpdateSkill = () => {
         if (isEdit && id) {
             const fetchDetailSkill = async () => {
                 try {
-
-
-
-
                     const response = await services.skills.detailSkill(Number(id))
 
 

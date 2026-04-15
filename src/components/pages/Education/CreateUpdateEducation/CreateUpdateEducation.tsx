@@ -7,20 +7,21 @@ import { BaseApiResponse } from "@/types/api";
 import { NetworkError } from "@/utils/network";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Box, Paper, Typography } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import Checkbox from "@/components/ui/Forms/Checkbox/Checkbox";
 import DatePicker from "@/components/ui/Forms/DatePicker";
 import FormActions from "@/components/ui/FormActions";
 
 
 const CreateUpdateEducation = () => {
-
+    const { id } = useParams(); // mengambil id dari url
+    const isEdit = Boolean(id); // jika ada ID, berarti sedang edit
 
     const [loading, setLoading] = useState(false);
-    const { control, handleSubmit } = useForm<EducationPayload>({
+    const { control, handleSubmit, reset } = useForm<EducationPayload>({
         resolver: yupResolver(educationSchema),
         defaultValues: {
             is_current: false,
@@ -29,14 +30,56 @@ const CreateUpdateEducation = () => {
     const navigate = useNavigate();
 
 
+    useEffect(() => {
+        if (isEdit && id) {
+            const fetchDetailEducation = async () => {
+                try {
+                    const response = await services.education.detailEducation(Number(id))
+
+
+                    if (response.data.data) {
+                        const education = response.data.data;
+                        reset({
+                            degree: education.degree,
+                            gpa: education.gpa,
+                            field_of_study: education.field_of_study,
+                            institution: education.institution,
+                            is_current: education.is_current,
+                            description: education.description,
+                            end_date: education.end_date,
+                            start_date: education.start_date,
+                        });
+                    }
+                } catch (error) {
+                    const networkError = error as NetworkError<BaseApiResponse>;
+                    const errorMessage = networkError.response?.data?.error
+                        || networkError.response?.data?.message
+                        || 'Silahkan coba lagi.';
+                    toast.error(errorMessage)
+                }
+            }
+
+
+            fetchDetailEducation();
+        }
+    }, [id, isEdit, reset])
+
+
     const onSubmit = async (formValue: EducationPayload) => {
         setLoading(true);
 
         try {
-            const response = await services.education.createEducation(formValue);
+            let response;
+            if (isEdit && id) {
+                response = await services.education.updateEducation(formValue, Number(id));
+
+            } else {
+                response = await services.education.createEducation(formValue);
+
+            }
             navigate(ROUTES.EDUCATION)
 
-            toast.success(response.data.message ?? "Berhasil Membuat Project");
+            toast.success(response.data.message ?? (isEdit && id ? "Berhasil Mengubah Education" : "Berhasil Membuat Education"));
         } catch (error) {
             const networkError = error as NetworkError<BaseApiResponse>;
             const errorMessage = networkError.response?.data?.error
@@ -57,7 +100,7 @@ const CreateUpdateEducation = () => {
                 href: ROUTES.EDUCATION,
             },
             {
-                label: "Tambah Pendidikan",
+                label: isEdit ? "Ubah Pendidikan" : "Tambah Pendidikan",
                 href: ROUTES.CREATE_UPDATE_EDUCATION,
             },
         ]}

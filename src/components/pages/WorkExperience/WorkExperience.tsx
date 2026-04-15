@@ -101,7 +101,7 @@ const WorkExperience = () => {
           <IconButton
             size="small"
             color="primary"
-            onClick={() => console.log("Edit ID:", row.ID)}
+            onClick={() => navigate(ROUTES.CREATE_UPDATE_WORK_EXPERIENCE.replace(':id?', String(row.ID)))}
             sx={{ display: { xs: "inline-flex", sm: "none" } }}
           >
             <EditIcon fontSize="small" />
@@ -119,7 +119,7 @@ const WorkExperience = () => {
             variant="outlined"
             size="small"
             startIcon={<EditIcon />}
-            onClick={() => console.log("Edit ID:", row.ID)}
+            onClick={() => navigate(ROUTES.CREATE_UPDATE_WORK_EXPERIENCE.replace(':id?', String(row.ID)))}
             sx={{ display: { xs: "none", sm: "inline-flex" }, textTransform: "none" }}
           >
             Edit
@@ -204,7 +204,7 @@ const WorkExperience = () => {
                 width: { xs: "100%", sm: "auto" },
                 padding: "8px 16px",
               }}
-              onClick={() => navigate(ROUTES.CREATE_UPDATE_WORK_EXPERIENCE,)}
+              onClick={() => navigate(ROUTES.CREATE_UPDATE_WORK_EXPERIENCE.replace('/:id?', ''))}
             >
               Tambah
             </Button>

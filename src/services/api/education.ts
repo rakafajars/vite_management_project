@@ -22,6 +22,7 @@ export interface EducationResponseData {
     end_date: string;
     gpa: number;
     is_current: boolean;
+    description: string;
 }
 
 
@@ -60,7 +61,18 @@ const education = {
 
     createEducation(payload: EducationPayload) {
         return network.post<BaseApiResponse>('/v1/education', payload);
-    }
+    },
+
+
+    detailEducation(id: number) {
+        return network.get<BaseApiResponse<EducationResponseData>>(`/v1/education/${id}`);
+    },
+
+    updateEducation(payload: EducationPayload, id: number) {
+        return network.put<BaseApiResponse>(`/v1/education/${id}`, payload);
+    },
+
+
 };
 
 export default education;

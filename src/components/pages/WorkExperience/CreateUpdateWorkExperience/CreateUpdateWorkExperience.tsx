@@ -10,34 +10,77 @@ import { BaseApiResponse } from "@/types/api";
 import { NetworkError } from "@/utils/network";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Box, Paper, Typography } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 
 
 
 const CreateUpdateWorkExperience = () => {
-
+    const { id } = useParams(); // mengambil id dari url
+    const isEdit = Boolean(id); // jika ada ID, berarti sedang edit
 
     const [loading, setLoading] = useState(false);
-    const { control, handleSubmit } = useForm<WorkExperiencePayload>({
-        resolver: yupResolver(workExperienceSchema),
+    const { control, handleSubmit, reset } = useForm<WorkExperiencePayload>({
+        resolver: yupResolver(workExperienceSchema) as any,
         defaultValues: {
             is_current: false,
         }
     })
     const navigate = useNavigate();
 
+    useEffect(() => {
+        if (isEdit && id) {
+            const fetchDetailWorkExperience = async () => {
+                try {
+                    const response = await services.workExperience.detailWorkExperience(Number(id))
+
+
+                    if (response.data.data) {
+                        const workExperience = response.data.data;
+                        reset({
+                            company_name: workExperience.company_name,
+                            description: workExperience.description,
+                            end_date: workExperience.end_date,
+                            is_current: workExperience.is_current,
+                            position: workExperience.position,
+                            start_date: workExperience.start_date,
+                        });
+                    }
+                } catch (error) {
+                    const networkError = error as NetworkError<BaseApiResponse>;
+                    const errorMessage = networkError.response?.data?.error
+                        || networkError.response?.data?.message
+                        || 'Silahkan coba lagi.';
+                    toast.error(errorMessage)
+                }
+            }
+
+
+            fetchDetailWorkExperience();
+        }
+    }, [id, isEdit, reset])
+
 
     const onSubmit = async (formValue: WorkExperiencePayload) => {
         setLoading(true);
 
         try {
-            const response = await services.workExperience.createWorkExperience(formValue);
+
+            let response;
+
+            if (isEdit && id) {
+                response = await services.workExperience.updateWorkExperience(formValue, Number(id));
+
+            } else {
+                response = await services.workExperience.createWorkExperience(formValue);
+
+            }
+
             navigate(ROUTES.WORK_EXPERIENCE)
 
-            toast.success(response.data.message ?? "Berhasil Membuat Project");
+            toast.success(response.data.message ?? (isEdit && id ? "Berhasil Mengubah Pengalaman Pekerjaan" : "Berhasil Membuat Pengalaman Pekerjaan"));
         } catch (error) {
             const networkError = error as NetworkError<BaseApiResponse>;
             const errorMessage = networkError.response?.data?.error
@@ -57,7 +100,7 @@ const CreateUpdateWorkExperience = () => {
                     label: "Pengalaman Kerja",
                     href: ROUTES.CREATE_UPDATE_WORK_EXPERIENCE,
                 }, {
-                    label: "Tambah Pengalaman Kerja",
+                    label: isEdit ? "Ubah Pengalaman Kerja" : "Tambah Pengalaman Kerja",
                     href: ROUTES.CREATE_UPDATE_WORK_EXPERIENCE,
                 },
             ]} >

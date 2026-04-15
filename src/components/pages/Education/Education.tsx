@@ -111,7 +111,8 @@ const Education = () => {
           <IconButton
             size="small"
             color="primary"
-            onClick={() => console.log("Edit ID:", row.ID)}
+            onClick={() => navigate(ROUTES.CREATE_UPDATE_EDUCATION.replace(':id?', String(row.ID)))}
+
             sx={{ display: { xs: "inline-flex", sm: "none" } }}
           >
             <EditIcon fontSize="small" />
@@ -129,7 +130,8 @@ const Education = () => {
             variant="outlined"
             size="small"
             startIcon={<EditIcon />}
-            onClick={() => console.log("Edit ID:", row.ID)}
+            onClick={() => navigate(ROUTES.CREATE_UPDATE_EDUCATION.replace(':id?', String(row.ID)))}
+
             sx={{ display: { xs: "none", sm: "inline-flex" }, textTransform: "none" }}
           >
             Edit
@@ -214,7 +216,7 @@ const Education = () => {
                 width: { xs: "100%", sm: "auto" },
                 padding: "8px 16px",
               }}
-              onClick={() => navigate(ROUTES.CREATE_UPDATE_EDUCATION)}
+              onClick={() => navigate(ROUTES.CREATE_UPDATE_EDUCATION.replace('/:id?', ''))}
             >
               Tambah
             </Button>
